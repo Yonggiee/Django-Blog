@@ -1,0 +1,4 @@
+Django
+
+image::./images/FlowOfDjango.PNG[640,640]
+

@@ -1,0 +1,38 @@
+Python
+
+Step size
+- mystring[::2] read every 2 character
+
+Print Formating
+- `x = "item 1: {}, item 2: {}".format("one", "two")`
+
+Add to List
+- .append()
+- .extend([1,2,3]) for multiple
+- for loop in list `firs_col = [row[0] for row in matrix]` (list comprehension)
+- x = [2,3,4]   x = [num**2 for num in x]
+
+Dictionary
+- No order like in javascript
+- {"key1": "value1" , "key2":"value2"}
+
+Tuples
+- immutable
+- (1,2,3)
+
+Set
+- set()
+- .add(2)
+- set([12,,3,4])
+
+Operators
+- and \ or
+
+Loops
+- for jelly in seq
+- for (tup1, tup2) in mypairs
+- while
+
+Range
+- range(5) / range(0,5)
+- range(0,5,2)
