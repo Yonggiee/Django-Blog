@@ -64,5 +64,16 @@ APIView
 . `from django.urls import include`
 
 Serializers
+
 - `from rest_framework import serializers`
 - import to `view.api` and use `serializer_class = `
+
+PUT
+
+- pk stands for primary key
+- updates entirely
+
+PATCH
+
+- partial updates
+
