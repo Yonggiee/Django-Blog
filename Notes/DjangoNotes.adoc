@@ -62,3 +62,7 @@ APIView
 - Require `rest_framework.response` too
 - add to urls.py in main folder
 . `from django.urls import include`
+
+Serializers
+- `from rest_framework import serializers`
+- import to `view.api` and use `serializer_class = `
