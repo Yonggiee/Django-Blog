@@ -45,6 +45,7 @@ Models in Django
 - Overwrite user permissions
 . `from django.contrib.auth.models import AbstractBaseUser`
 . `from django.contrib.auth.models import PermissionsMixin`
+. add in model's admin.py
 
 image::./images/DjangoModel.PNG[640,640]
 
@@ -52,3 +53,12 @@ Make migrations to database
 
 - `python manage.py makemigrations` create init file for django to know how to create database
 - `python manage.py migrate`
+
+APIView
+
+- Uses standard HTTP Methods for functions : GET/PUT/PATCH/DELETE/POST
+- For a synchronoous response
+- import from `rest_framework.views`
+- Require `rest_framework.response` too
+- add to urls.py in main folder
+. `from django.urls import include`
