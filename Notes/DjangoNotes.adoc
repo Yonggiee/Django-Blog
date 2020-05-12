@@ -77,3 +77,12 @@ PATCH
 
 - partial updates
 
+ViewSets
+
+- Uses model operations for functions:
+. List/Create/Retrieve/Update/Partial Update/Destroy
+- Best use 
+. Create a simple CRUD interface to your database
+. Working with standard data structures
+- Use router to map viewset to url
+. add in `urls.py`

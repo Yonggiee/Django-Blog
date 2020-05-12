@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import viewsets
 
 from . import serializers
 
@@ -37,10 +38,17 @@ class HelloApiView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk=None):
-        return Response({'message':'patch'})
+        return Response({'method':'patch'})
 
     def put(self, request, pk=None):
-        return Response({'message':'put'})
+        return Response({'method':'put'})
 
     def delete(self, request, pk=None):
-        return Response({'message':'delete'})
+        return Response({'method':'delete'})
+
+
+class HelloViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+
+        return Response({'message':'Hello'})
