@@ -86,3 +86,4 @@ ViewSets
 . Working with standard data structures
 - Use router to map viewset to url
 . add in `urls.py`
+- overall view and detail view
