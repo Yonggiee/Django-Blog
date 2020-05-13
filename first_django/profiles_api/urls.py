@@ -7,6 +7,8 @@ from . import views
 router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, basename='hello-viewset')
 router.register('profile', views.UserProfileViewSet) #no need base name as defined model in serializer
+router.register('login', views.LoginViewSet, basename='login-viewset')
+
 
 urlpatterns = [
     url('hello-view/', views.HelloApiView.as_view()),
