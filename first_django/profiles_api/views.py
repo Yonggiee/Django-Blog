@@ -55,7 +55,7 @@ class HelloApiView(APIView):
 
 class HelloViewSet(viewsets.ViewSet):
 
-    serializer_class = serializers.HelloSerializer
+    serializer_class = serializers.HelloSerializer # can be removed but shown for syntax
 
     def list(self, request):
 
