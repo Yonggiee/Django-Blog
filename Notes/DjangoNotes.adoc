@@ -87,3 +87,11 @@ ViewSets
 - Use router to map viewset to url
 . add in `urls.py`
 - overall view and detail view
+
+Permissions
+
+- prevent every user from changing other user's information
+- `from rest_framework import permissions`
+- token authentication, user receives temporary token to be inserted in the headers
+of HTTP request
+. `from rest_framework.authentication import TokenAuthentication`
