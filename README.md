@@ -1,4 +1,4 @@
-# Learn-Django
+# Cynopsis Entertainment
 
 Resources
 
