@@ -2,15 +2,18 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Homepage</title>
+        <title>Home</title>
     </head>
     <body>
         <h1>This is the homepage</h1>
         <div class="posts">
             {% for post in posts %}
                 <div class="post">
-                    <h2><a href="#">{{ post.title }}</a></h2>
+                    <h2><a href="{% url 'detailed' slug=post.slug %}">{{ post.title }}</a></h2>
                     <p>{{ post.desc }}</p>
+                    <p>{{ post.user }}</p>
+                    <p>{{ post.last_modified }}</p>
+                    <p>{{ post.slug }}</p>
                 </div>
             {% endfor %}
         </div>
