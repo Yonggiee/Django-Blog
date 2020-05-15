@@ -16,3 +16,8 @@ class PostsAndCommentsRouter(object):
     #problem
     def allow_relation(self, obj1, obj2, **hints):
         return True
+
+    def allow_migrate(self, db, app_label, model_name=None, **hints):
+        if app_label == 'post' or app_label == 'comment':
+            return db == 'PostsAndComments'
+        return False
