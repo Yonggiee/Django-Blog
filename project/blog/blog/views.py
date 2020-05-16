@@ -14,7 +14,7 @@ def home(request):
 def detailed(request, slug):
 
     post = Post.objects.using('PostsAndComments').get(slug=slug)
-    comments = Comment.objects.using('PostsAndComments').all()
+    comments = Comment.objects.using('PostsAndComments').filter(post=post.id)
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
