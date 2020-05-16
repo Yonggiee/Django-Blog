@@ -1,6 +1,7 @@
-from django.db import models
 from autoslug import AutoSlugField
+from django.db import models
 from django.core.validators import MaxValueValidator, RegexValidator
+
 from .validators import validate_symbol
 
 # Create your models here.
