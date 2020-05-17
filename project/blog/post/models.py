@@ -1,6 +1,7 @@
 from autoslug import AutoSlugField
 from django.db import models
 from django.core.validators import MaxValueValidator, RegexValidator
+from django.urls import reverse
 
 from .validators import validate_symbol
 
@@ -22,7 +23,6 @@ class Post(models.Model):
 
     __original_title = None
     __original_desc = None
-
 
 
     ####### kkm

@@ -1,7 +1,6 @@
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 from comment.forms import CommentForm
 from comment.models import Comment
@@ -50,18 +49,16 @@ class PostCreateView(CreateView):
 
     def get_success_url(self):
         return self.post_instance.get_absolute_url()
-        
-def post_edit(request, slug):
-    if request.method == 'PUT':
-        form = PostForm(request.PUT)
-        if form.has_changed() or form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save(using='PostsAndComments')
-            return redirect('detailed', slug=post.slug)
-        else:
-            return HttpResponse(form.errors) ##todo
-    else:
-        post = Post.objects.using('PostsAndComments').get(slug=slug)
-        post_form = PostForm(instance=post)
-        return render(request, 'post_edit.html', { 'form':post_form })
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = PostForm().fields
+    template_name = 'post_edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        self.post_instance = post
+        return super().form_valid(form)  # you need to return the super call
+
+    def get_success_url(self):
+        return self.post_instance.get_absolute_url()
