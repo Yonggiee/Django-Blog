@@ -96,5 +96,7 @@ class UserLoginView(LoginView):
     template_name = 'user_login.html'
 
     def get_success_url(self):
-        return '/edit/' + self.kwargs['slug']
+        if self.kwargs['slug'] != 'home':
+            return '/edit/' + self.kwargs['slug']
+        return reverse('home')
     
