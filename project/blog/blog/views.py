@@ -55,6 +55,12 @@ class PostUpdateView(UpdateView):
     fields = PostForm().fields
     template_name = 'post_edit.html'
 
+    def post(self, request, slug):
+        if 'delete' in self.request.POST:
+            post_delete = Post.objects.get(slug=slug)
+            post_delete.is_trashed = True
+        return super(PostUpdateView, self).post(request, slug)
+
     def form_valid(self, form):
         post = form.save(commit=False)
         self.post_instance = post
