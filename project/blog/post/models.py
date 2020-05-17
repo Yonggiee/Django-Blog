@@ -20,23 +20,3 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('detailed', kwargs={'slug': self.slug})
-
-    __original_title = None
-    __original_desc = None
-
-
-    ####### kkm
-
-    def save(self, force_insert=False, force_update=False, *args, **kwargs):
-        title_is_changed = self.title == self.__original_title
-        desc_is_changed = self.desc == self.__original_desc
-        if self.title != self.__original_title:
-            super(Post, self).save(force_insert, force_update, *args, **kwargs)
-            self.__original_title = self.title
-            self.__original_desc = self.desc
-
-    def changed(self, changed_post):
-        title_is_changed = self.title == changed_post.title
-        desc_is_changed = self.desc == changed_post.title
-
-        return title_is_changed or desc_is_changed

@@ -1,11 +1,14 @@
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
+from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout
 
 from comment.forms import CommentForm
 from comment.models import Comment
 from post.forms import PostForm
 from post.models import Post
+from user.forms import SignUpForm
 
 class HomeView(ListView):
     model = Post
@@ -13,13 +16,18 @@ class HomeView(ListView):
     queryset = Post.objects.using('PostsAndComments').all().order_by('-last_modified')
     template_name = 'home.html'
 
+    def post(self, request):
+        if 'logout' in self.request.POST:
+            logout(request)
+        return HttpResponseRedirect(self.request.path_info)
+
 class PostDetailedView(DetailView):
     model = Post
     template_name='post_detailed.html'
     slug_url_kwarg = 'slug'
 
     def get_context_data(self, **kwargs):
-        context = super(PostDetailedView, self).get_context_data(**kwargs) # get the default context data
+        context = super(PostDetailedView, self).get_context_data(**kwargs)
         context['form'] = CommentForm()
         context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id)
         return context
@@ -45,7 +53,7 @@ class PostCreateView(CreateView):
         post = form.save(commit=False)
         post.user = self.request.user
         self.post_instance = post
-        return super().form_valid(form)  # you need to return the super call
+        return super().form_valid(form)
 
     def get_success_url(self):
         return self.post_instance.get_absolute_url()
@@ -64,7 +72,21 @@ class PostUpdateView(UpdateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         self.post_instance = post
-        return super().form_valid(form)  # you need to return the super call
+        return super().form_valid(form)
 
     def get_success_url(self):
         return self.post_instance.get_absolute_url()
+
+class UserCreateView(CreateView):
+    form_class = SignUpForm
+    template_name = 'user_new.html'
+
+    def get_success_url(self):
+        return reverse('home')
+
+    def form_valid(self, form):
+        valid = super(UserCreateView, self).form_valid(form)
+        username, password = form.cleaned_data.get('username'), form.cleaned_data.get('password1')
+        new_user = authenticate(username=username, password=password)
+        login(self.request, new_user)
+        return valid

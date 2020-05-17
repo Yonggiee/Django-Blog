@@ -17,12 +17,13 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
-from .views import HomeView, PostDetailedView, PostCreateView, PostUpdateView
+from .views import HomeView, PostDetailedView, PostCreateView, PostUpdateView, UserCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', HomeView.as_view(), name="home"),
-    url(r'^new/$', PostCreateView.as_view(), name="post_new"),
+    url(r'^new-post/$', PostCreateView.as_view(), name="post_new"),
+    url(r'^new-user/$', UserCreateView.as_view(), name="user_new"),
     url(r'^(?P<slug>[\w-]+)/$', PostDetailedView.as_view(), name="detailed"),
-    url(r'^edit/(?P<slug>[\w-]+)/$', PostUpdateView.as_view(), name="post_edit")
+    url(r'^edit/(?P<slug>[\w-]+)/$', PostUpdateView.as_view(), name="post_edit"),
 ]
