@@ -16,4 +16,8 @@ class SignUpForm(UserCreationForm):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
             raise forms.ValidationError("the given email is already registered")
         return self.cleaned_data['email']
-        
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password')

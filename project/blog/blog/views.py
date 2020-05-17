@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LoginView
 
 from comment.forms import CommentForm
 from comment.models import Comment
@@ -90,3 +91,10 @@ class UserCreateView(CreateView):
         new_user = authenticate(username=username, password=password)
         login(self.request, new_user)
         return valid
+
+class UserLoginView(LoginView):
+    template_name = 'user_login.html'
+
+    def get_success_url(self):
+        return '/edit/' + self.kwargs['slug']
+    
