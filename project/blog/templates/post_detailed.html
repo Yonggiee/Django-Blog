@@ -15,16 +15,14 @@
         <p>{{ post.slug }}</p>
     </div>
 
-    {% if user.is_authenticated %}
         <a href="{% url 'post_edit' slug=post.slug %}">
-            <button>Edit Post</button>
+            {% if is_post_user %}
+                <button>Edit Post</button>
+            {% elif not user.is_authenticated %}
+                <button>Login to edit</button>
+            {% endif %}
         </a>
-    {% else %}
-        <a href="{% url 'user_login' slug=post.slug %}">
-            <button>Login to edit</button>
-        </a>
-    {% endif %}
-
+    
     <div class="comments">
         {% for comment in comments %}
         <div class="comment">
@@ -38,6 +36,8 @@
         {{ form }}
         {% if user.is_authenticated %}
             <input type="submit" value="Submit">
+        {% else %}
+            <input type="submit" value="Login to comment">
         {% endif %}
     </form>
 </body>

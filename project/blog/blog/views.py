@@ -4,6 +4,8 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import Http404
 
 from comment.forms import CommentForm
 from comment.models import Comment
@@ -31,10 +33,18 @@ class PostDetailedView(DetailView):
         context = super(PostDetailedView, self).get_context_data(**kwargs)
         context['form'] = CommentForm()
         context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id)
+
+        current_user = self.request.user.username
+        slug = self.kwargs['slug']
+        post_user = Post.objects.get(slug=slug).user
+        context['is_post_user'] = current_user == post_user
         return context
     
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
+        if request.user.is_anonymous:
+            return HttpResponseRedirect(reverse('user_login') + '?next=/' + kwargs['slug'])
+
         if form.is_valid():
             comment = form.save(commit=False)
             comment.user = request.user
@@ -44,11 +54,13 @@ class PostDetailedView(DetailView):
             return HttpResponseRedirect(self.request.path_info)
         else:
             return HttpResponse(form.errors) ##todo
+            
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'post_new.html'
     fields = PostForm().fields
+    login_url = '/login/'
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -59,10 +71,11 @@ class PostCreateView(CreateView):
     def get_success_url(self):
         return self.post_instance.get_absolute_url()
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Post
     fields = PostForm().fields
     template_name = 'post_edit.html'
+    login_url = '/login/'
 
     def post(self, request, slug):
         if 'delete' in self.request.POST:
@@ -77,6 +90,17 @@ class PostUpdateView(UpdateView):
 
     def get_success_url(self):
         return self.post_instance.get_absolute_url()
+
+    def test_func(self):
+        current_user = self.request.user.username
+        slug = self.kwargs['slug']
+        post_user = Post.objects.get(slug=slug).user
+        if current_user == post_user:
+            return True
+        else:
+            if self.request.user.is_authenticated:
+                raise Http404("You are not the user of this post")
+    
 
 class UserCreateView(CreateView):
     form_class = SignUpForm
@@ -96,7 +120,8 @@ class UserLoginView(LoginView):
     template_name = 'user_login.html'
 
     def get_success_url(self):
-        if self.kwargs['slug'] != 'home':
-            return '/edit/' + self.kwargs['slug']
-        return reverse('home')
+        if 'next' in self.request.POST:
+            return self.request.POST.get('next')
+        else:
+            return reverse('home')
     
