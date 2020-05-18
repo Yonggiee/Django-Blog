@@ -26,8 +26,12 @@
         <form class="filter_form" method="get">
             {{ form.user }}
             {{ form.title }}
-            {{ form.date_from }}
-            {{ form.date_to }}
+            {{ form.date_from_day }}
+            {{ form.date_from_month }}
+            {{ form.date_from_year }}
+            {{ form.date_to_day }}
+            {{ form.date_to_month }}
+            {{ form.date_to_year }}
             <input type="submit" value="Search">
         </form>
 

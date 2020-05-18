@@ -10,6 +10,24 @@
 
     <h1>This is the Moderator page</h1>
 
+    <form class="filter_form" method="get">
+        {{ form.user }}
+        {{ form.title }}
+        {{ form.date_from_day }}
+        {{ form.date_from_month }}
+        {{ form.date_from_year }}
+        {{ form.date_to_day }}
+        {{ form.date_to_month }}
+        {{ form.date_to_year }}
+        {{ form.is_deleted }}
+        {{ form.to_search }}
+        <input type="submit" value="Search">
+    </form>
+
+    <a href="{% url 'moderator' %}">
+        <button>See All</button>
+    </a>
+
     <div class="posts">
         {% for post in posts %}
             <div class="post">
@@ -19,6 +37,18 @@
             </div>
         {% endfor %}
     </div>
+
+    <div class="comments">
+        {% for comment in comments %}
+        <div class="comment">
+            <p>{{ comment.body }}</p>
+            <p>{{ post.user }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <br>
+    <br>
 
     <div class="comments">
         {% for comment in comments %}

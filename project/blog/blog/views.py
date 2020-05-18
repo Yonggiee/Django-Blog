@@ -9,7 +9,7 @@ from django.http import Http404
 
 from comment.forms import CommentForm
 from comment.models import Comment
-from post.forms import PostForm, FilterForm
+from post.forms import PostForm, FilterForm, ModeratorFilterForm
 from post.models import Post
 from user.forms import SignUpForm
 
@@ -27,17 +27,29 @@ class HomeView(ListView):
         posts = Post.objects.using('PostsAndComments').filter(is_trashed=False).order_by('-last_modified')
         title_query = self.request.GET.get('title')
         user_query = self.request.GET.get('user')
-        date_from_query = self.request.GET.get('date_from')
-        date_to_query = self.request.GET.get('date_to')
+        date_from_day_query = self.request.GET.get('date_from_day')
+        date_from_month_query = self.request.GET.get('date_from_month')
+        date_from_year_query = self.request.GET.get('date_from_year')
+        date_to_day_query = self.request.GET.get('date_to_day')
+        date_to_month_query = self.request.GET.get('date_to_month')
+        date_to_year_query = self.request.GET.get('date_to_year')
 
         if title_query != '' and title_query is not None:
             posts = posts.filter(title__icontains=title_query)
         if user_query != '' and user_query is not None:
             posts = posts.filter(user__icontains=user_query)
-        if date_from_query != '' and date_from_query is not None:
-            posts = posts.filter(last_modified__gte=date_from_query)
-        if date_to_query != '' and date_to_query is not None:
-            posts = posts.filter(last_modified__lte=date_to_query)
+        if date_from_day_query != '' and date_from_day_query is not None:
+            posts = posts.filter(last_modified__date__gte=date_from_day_query)
+        if date_from_month_query != '' and date_from_month_query is not None:
+            posts = posts.filter(last_modified__month__gte=date_from_month_query)
+        if date_from_year_query != '' and date_from_year_query is not None:
+            posts = posts.filter(last_modified__year__gte=date_from_year_query)
+        if date_to_day_query != '' and date_to_day_query is not None:
+            posts = posts.filter(last_modified__date__lte=date_to_day_query)
+        if date_to_month_query != '' and date_to_month_query is not None:
+            posts = posts.filter(last_modified__month__lte=date_to_month_query)
+        if date_to_year_query != '' and date_to_year_query is not None:
+            posts = posts.filter(last_modified__year__lte=date_to_year_query)
 
         return posts
 
@@ -126,7 +138,6 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             if self.request.user.is_authenticated:
                 raise Http404("You are not the user of this post")
     
-
 class UserCreateView(CreateView):
     form_class = SignUpForm
     template_name = 'user_new.html'
@@ -156,7 +167,70 @@ class ModeratorView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ModeratorView, self).get_context_data(**kwargs)
-        context['comments'] = Comment.objects.using('PostsAndComments').all()
-        context['posts'] = Post.objects.using('PostsAndComments').all()
+        context['form'] = ModeratorFilterForm()
+
+        title_query = self.request.GET.get('title')
+        user_query = self.request.GET.get('user')
+        date_from_day_query = self.request.GET.get('date_from_day')
+        date_from_month_query = self.request.GET.get('date_from_month')
+        date_from_year_query = self.request.GET.get('date_from_year')
+        date_to_day_query = self.request.GET.get('date_to_day')
+        date_to_month_query = self.request.GET.get('date_to_month')
+        date_to_year_query = self.request.GET.get('date_to_year')
+        is_deleted_query = self.request.GET.get('is_deleted')
+    
+        to_search_query = self.request.GET.get('to_search')
+
+        if to_search_query == '1':
+            comments = Comment.objects.using('PostsAndComments').all().order_by('-last_modified')
+
+            if title_query != '' and title_query is not None:
+                comments = comments.filter(post__title__icontains=title_query)
+            if user_query != '' and user_query is not None:
+                comments = comments.filter(user__icontains=user_query)
+            if date_from_day_query != '' and date_from_day_query is not None:
+                posts = posts.filter(last_modified__date__gte=date_from_day_query)
+            if date_from_month_query != '' and date_from_month_query is not None:
+                posts = posts.filter(last_modified__month__gte=date_from_month_query)
+            if date_from_year_query != '' and date_from_year_query is not None:
+                posts = posts.filter(last_modified__year__gte=date_from_year_query)
+            if date_to_day_query != '' and date_to_day_query is not None:
+                posts = posts.filter(last_modified__date__lte=date_to_day_query)
+            if date_to_month_query != '' and date_to_month_query is not None:
+                posts = posts.filter(last_modified__month__lte=date_to_month_query)
+            if date_to_year_query != '' and date_to_year_query is not None:
+                posts = posts.filter(last_modified__year__lte=date_to_year_query)
+            if is_deleted_query != '' and is_deleted_query is not None:
+                comments = comments.filter(is_trashed=is_deleted_query)
+            else:
+                comments = comments.filter(is_trashed=False)
+
+            context['comments'] = comments
+
+        else:
+            posts = Post.objects.using('PostsAndComments').all().order_by('-last_modified')
+
+            if title_query != '' and title_query is not None:
+                posts = posts.filter(title__icontains=title_query)
+            if user_query != '' and user_query is not None:
+                posts = posts.filter(user__icontains=user_query)
+            if date_from_day_query != '' and date_from_day_query is not None:
+                posts = posts.filter(last_modified__date__gte=date_from_day_query)
+            if date_from_month_query != '' and date_from_month_query is not None:
+                posts = posts.filter(last_modified__month__gte=date_from_month_query)
+            if date_from_year_query != '' and date_from_year_query is not None:
+                posts = posts.filter(last_modified__year__gte=date_from_year_query)
+            if date_to_day_query != '' and date_to_day_query is not None:
+                posts = posts.filter(last_modified__date__lte=date_to_day_query)
+            if date_to_month_query != '' and date_to_month_query is not None:
+                posts = posts.filter(last_modified__month__lte=date_to_month_query)
+            if date_to_year_query != '' and date_to_year_query is not None:
+                posts = posts.filter(last_modified__year__lte=date_to_year_query)
+            if is_deleted_query != '' and is_deleted_query is not None:
+                posts = posts.filter(is_trashed=is_deleted_query)
+            else:
+                posts = posts.filter(is_trashed=False)
+
+            context['posts'] = posts
 
         return context
