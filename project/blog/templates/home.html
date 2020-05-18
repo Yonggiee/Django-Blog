@@ -23,12 +23,25 @@
             {% endif %}
         </a>
 
+        <form class="filter_form" method="get">
+            {{ form.user }}
+            {{ form.title }}
+            {{ form.date_from }}
+            {{ form.date_to }}
+            <input type="submit" value="Search">
+        </form>
+
+        <a href="{% url 'home' %}">
+            <button>See All</button>
+        </a>
+
         <div class="posts">
             {% for post in posts %}
                 <div class="post">
                     <h2><a href="{% url 'detailed' slug=post.slug %}">{{ post.title }}</a></h2>
                     <p>{{ post.desc }}</p>
                     <p>{{ post.user }}</p>
+                    <p>{{ post.is_trashed }}</p>
                     <p>{{ post.last_modified }}</p>
                 </div>
             {% endfor %}

@@ -7,6 +7,8 @@
 </head>
 
 <body>
+    <h3>{{ post.is_trashed }} </h3>
+
     <div class="post">
         <h2>{{ post.title }}</h2>
         <p>{{ post.desc }}</p>
@@ -16,7 +18,7 @@
     </div>
 
         <a href="{% url 'post_edit' slug=post.slug %}">
-            {% if is_post_user %}
+            {% if is_post_user or is_superuser %}
                 <button>Edit Post</button>
             {% elif not user.is_authenticated %}
                 <button>Login to edit</button>

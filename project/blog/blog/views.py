@@ -9,20 +9,42 @@ from django.http import Http404
 
 from comment.forms import CommentForm
 from comment.models import Comment
-from post.forms import PostForm
+from post.forms import PostForm, FilterForm
 from post.models import Post
 from user.forms import SignUpForm
 
 class HomeView(ListView):
     model = Post
     context_object_name = 'posts' 
-    queryset = Post.objects.using('PostsAndComments').all().order_by('-last_modified')
     template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context['form'] = FilterForm()
+        return context
+
+    def get_queryset(self):
+        posts = Post.objects.using('PostsAndComments').filter(is_trashed=False).order_by('-last_modified')
+        title_query = self.request.GET.get('title')
+        user_query = self.request.GET.get('user')
+        date_from_query = self.request.GET.get('date_from')
+        date_to_query = self.request.GET.get('date_to')
+
+        if title_query != '' and title_query is not None:
+            posts = posts.filter(title__icontains=title_query)
+        if user_query != '' and user_query is not None:
+            posts = posts.filter(user__icontains=user_query)
+        if date_from_query != '' and date_from_query is not None:
+            posts = posts.filter(last_modified__gte=date_from_query)
+        if date_to_query != '' and date_to_query is not None:
+            posts = posts.filter(last_modified__lte=date_to_query)
+
+        return posts
 
     def post(self, request):
         if 'logout' in self.request.POST:
             logout(request)
-        return HttpResponseRedirect(self.request.path_info)
+        return HttpResponseRedirect(self.request.path_info) 
 
 class PostDetailedView(DetailView):
     model = Post
@@ -38,6 +60,8 @@ class PostDetailedView(DetailView):
         slug = self.kwargs['slug']
         post_user = Post.objects.get(slug=slug).user
         context['is_post_user'] = current_user == post_user
+
+        context['is_superuser']= self.request.user.is_superuser
         return context
     
     def post(self, request, *args, **kwargs):
@@ -81,6 +105,7 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         if 'delete' in self.request.POST:
             post_delete = Post.objects.get(slug=slug)
             post_delete.is_trashed = True
+            post_delete.save()
         return super(PostUpdateView, self).post(request, slug)
 
     def form_valid(self, form):
@@ -95,7 +120,7 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         current_user = self.request.user.username
         slug = self.kwargs['slug']
         post_user = Post.objects.get(slug=slug).user
-        if current_user == post_user:
+        if current_user == post_user or self.request.user.is_superuser:
             return True
         else:
             if self.request.user.is_authenticated:
@@ -125,3 +150,13 @@ class UserLoginView(LoginView):
         else:
             return reverse('home')
     
+class ModeratorView(ListView):
+    template_name = 'moderator.html'
+    model = Post
+
+    def get_context_data(self, **kwargs):
+        context = super(ModeratorView, self).get_context_data(**kwargs)
+        context['comments'] = Comment.objects.using('PostsAndComments').all()
+        context['posts'] = Post.objects.using('PostsAndComments').all()
+
+        return context
