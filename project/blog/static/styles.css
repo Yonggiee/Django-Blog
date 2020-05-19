@@ -34,7 +34,7 @@ body{
     margin-left: 25%;
     width: 50%;
     background-position: center center;
-    background-color: rgb(244, 244, 244);
+    background-color: white;
     margin-top: 70px;
     padding:0;
     color: grey;
@@ -183,7 +183,7 @@ td{
     border-width: 2px;
     border-color: rgb(206, 206, 206);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: rgb(244, 244, 244);
+    background-color: white;
     height: 550px;
 }
 
