@@ -117,6 +117,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     fields = PostForm().fields
     login_url = '/login/'
 
+    def get_context_data(self, **kwargs):
+        context = super(PostCreateView, self).get_context_data(**kwargs)
+        temp = context['form'].save(commit=False)
+        context['form'] = PostForm(instance=temp)
+        return context
+
     def form_valid(self, form):
         post = form.save(commit=False)
         post.user = self.request.user

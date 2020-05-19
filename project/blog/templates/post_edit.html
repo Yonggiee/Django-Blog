@@ -3,9 +3,9 @@
 {% block title %} Edit: {{ post.title }} {% endblock %}
 
 {% block content %}
-    <div class="edit-form">
+    <div class="post-form">
         <form method="post">
-            <div id="edit-post-align">
+            <div id="post-align">
                 {% csrf_token %}
                 <p>Title:</p>
                 {{ form.title }}

@@ -243,9 +243,10 @@ td{
     background-color: rgb(232, 232, 232);
 }
 
-/* edit view */
+/* edit view + create view*/
 
-.edit-form{
+.post-form{
+    overflow: auto;
     margin-top: 100px;
     margin-left: 25%;
     width: 50%;
@@ -257,7 +258,7 @@ td{
     background-color: white;
 }
 
-#edit-post-align{
+#post-align{
     margin-top: 30px;
     margin-left: 7%;
 }
@@ -266,4 +267,10 @@ td{
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 78%;
+}
+
+#new-form-buttons{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 88%;
 }
