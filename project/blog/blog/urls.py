@@ -18,7 +18,10 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
-from .views import HomeView, PostDetailedView, PostCreateView, PostUpdateView, UserCreateView, UserLoginView, ModeratorView
+from views.post import PostDetailedView, PostCreateView, PostUpdateView
+from views.home import HomeView
+from views.moderator import ModeratorView
+from views.user import UserCreateView, UserLoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
