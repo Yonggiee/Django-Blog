@@ -1,41 +1,51 @@
 {% extends 'base_layout.html' %}
 
-{% block title %} {{ post.title }} {% endblock %}
+{% block title %} Title: {{ post.title }} {% endblock %}
 
 {% block content %}
-    <h3>{{ post.is_trashed }} </h3>
 
-    <div class="post">
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.desc }}</p>
-        <p>{{ post.user }}</p>
-        <p>{{ post.last_modified }}</p>
-        <p>{{ post.slug }}</p>
-    </div>
-
-        <a href="{% url 'post_edit' slug=post.slug %}">
-            {% if is_post_user or is_superuser %}
-                <button>Edit Post</button>
-            {% elif not user.is_authenticated %}
-                <button>Login to edit</button>
-            {% endif %}
-        </a>
-    
-    <div class="comments">
-        {% for comment in comments %}
-        <div class="comment">
-            <p>{{ comment.body }}</p>
-            <p>{{ post.user }}</p>
+    <div class="detailed">
+        <div class="detailed-left">
+            <div id="detail-left-left">
+                <div id="detail-left-left-top">
+                    <a href="{% url 'post_edit' slug=post.slug %}">
+                        {% if is_post_user or is_superuser %}
+                        <button id="button">Edit Post</button>
+                        {% elif not user.is_authenticated %}
+                        <button id="button">Login to edit</button>
+                        {% endif %}
+                    </a>
+                </div>
+                <p>Author: {{ post.user }}</p>
+                <p>Last Modified: {{ post.last_modified }}</p>
+            </div>
+            <div class="detailed-post">
+                <h1>{{ post.title }}</h1>
+                <p>{{ post.desc }}</p>
+            </div>
         </div>
-        {% endfor %}
+
+        <div class="detailed-right">
+            <div class="comment_form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form.body }}
+                    {% if user.is_authenticated %}
+                        <input id="button" type="submit" value="Comment">
+                    {% else %}
+                        <input id="button" type="submit" value="Login to comment">
+                    {% endif %}
+                </form>
+            </div>
+            <h3>Comments</h3>
+            <div class="comments">
+                {% for comment in comments %}
+                <div class="comment">
+                    <p>{{ comment.body }}</p>
+                    <p id="detailed-comment-user">By:{{ post.user }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-    <form class="comment_form" method="post">
-        {% csrf_token %}
-        {{ comment_form }}
-        {% if user.is_authenticated %}
-            <input type="submit" value="Comment">
-        {% else %}
-            <input type="submit" value="Login to comment">
-        {% endif %}
-    </form>
 {% endblock %}

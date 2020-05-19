@@ -26,9 +26,6 @@
         </div>
         <div id="buttons">
             <input id="button" type="submit" value="Search">
-            <a href="{% url 'home' %}">
-                <button id="button">See All</button>
-            </a>
         </div>
     </form>
 </div>
@@ -53,7 +50,7 @@
 
     <table CELLSPACING=0>
         {% for post in posts %}
-        <tr class=post>
+        <tr class="post-table">
             <td id="post-title"><a href="{% url 'detailed' slug=post.slug %}">{{ post.title }}</a></td>
             <td id="post-user"><a href="{% url 'detailed' slug=post.slug %}">{{ post.user }}</a></td>
             <td id="post-date"><a href="{% url 'detailed' slug=post.slug %}">{{ post.last_modified }}</a></td>

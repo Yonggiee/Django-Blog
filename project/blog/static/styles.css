@@ -1,8 +1,33 @@
+/* header */
+.menu-header{
+    height: 40px;
+    width: 100%;
+    background-color: rgb(64, 141, 224);
+    position: fixed;
+    top: 0px;
+}
+
+.login-logout{
+    display: inline-block;
+    right: 40px;
+    margin-top: 10px;
+    position: absolute;
+}
+
+.home-icon{
+    height: 30px;
+    margin-left: 30px;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+/* Common */
 body{
     margin: 0;
     background-color: rgb(232, 232, 232);
 }
 
+/* Home */
 .home-filter{
     overflow: auto;
     background-size: cover;
@@ -17,28 +42,6 @@ body{
     border-width: 2px;
     border-color: rgb(206, 206, 206);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.home-icon{
-    height: 30px;
-    margin-left: 30px;
-    margin-top: 5px;
-    display: inline-block;
-}
-
-.menu-header{
-    height: 40px;
-    width: 100%;
-    background-color: rgb(64, 141, 224);
-    position: fixed;
-    top: 0px;
-}
-
-.login-logout{
-    display: inline-block;
-    right: 40px;
-    margin-top: 10px;
-    position: absolute;
 }
 
 .filter-part-1{
@@ -137,7 +140,7 @@ td a {
     width: 15%;
 }
 
-.post:hover{
+.post-table:hover{
     background: rgb(192, 219, 252); 
 }
 
@@ -163,4 +166,79 @@ td{
 #post-date-header{
     width: 15%;
     float:left;
+}
+
+/* detailed view */
+
+.detailed{
+    padding-top: 100px;
+    display: inline-flex;
+    width: 100%;
+}
+
+.detailed-left{
+    margin-left: 50px;
+    width: 65%;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: rgb(244, 244, 244);
+    height: 550px;
+}
+
+.detailed-right{
+    margin-left: 40px;
+    margin-right: 20px;
+    height: 550px;
+}
+
+#detail-left-left{
+    float: right;
+    margin-right: 5%;
+    margin-top: 40px;
+    font-size: small;
+}
+
+#detail-left-left-top{
+    padding-bottom: 5px;
+}
+
+.comment_form{
+    padding:10px;
+    margin-bottom: 20px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: rgb(244, 244, 244);
+}
+
+.comments{
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: rgb(244, 244, 244);
+    overflow-y:auto;
+    height: 390px;
+}
+
+.detailed-post{
+    margin-top: 80px;
+    margin-left: 70px;
+    margin-right: 70px;
+}
+
+#detailed-comment-user{
+    margin-left: 80%;
+    font-size: small;
+}
+.comment{
+    background-color: white;
+    padding: 0;
+}
+
+.comment:nth-child(even){
+    background-color: rgb(225, 225, 225);
 }
