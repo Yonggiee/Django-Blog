@@ -211,7 +211,7 @@ td{
     border-width: 2px;
     border-color: rgb(206, 206, 206);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: rgb(244, 244, 244);
+    background-color: white;
 }
 
 .comments{
@@ -219,9 +219,9 @@ td{
     border-width: 2px;
     border-color: rgb(206, 206, 206);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: rgb(244, 244, 244);
     overflow-y:auto;
     height: 390px;
+    background-color: white; 
 }
 
 .detailed-post{
@@ -240,5 +240,30 @@ td{
 }
 
 .comment:nth-child(even){
-    background-color: rgb(225, 225, 225);
+    background-color: rgb(232, 232, 232);
+}
+
+/* edit view */
+
+.edit-form{
+    margin-top: 100px;
+    margin-left: 25%;
+    width: 50%;
+    background-position: center center;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: white;
+}
+
+#edit-post-align{
+    margin-top: 30px;
+    margin-left: 7%;
+}
+
+#edit-form-buttons{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 78%;
 }

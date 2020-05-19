@@ -8,6 +8,13 @@ class PostForm(ModelForm):
         model = Post
         fields = ('title', 'desc',)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs['size']=102
+        self.fields['desc'].widget.attrs['cols']=100
+        self.fields['desc'].widget.attrs['style']='resize:none;'
+        self.fields['desc'].widget.attrs['rows']=35
+
 class FilterForm(forms.Form):
     date_from_day = forms.IntegerField(required=False)
     date_from_month = forms.IntegerField(required=False)

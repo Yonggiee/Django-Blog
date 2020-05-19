@@ -132,6 +132,12 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     template_name = 'post_edit.html'
     login_url = '/login/'
 
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdateView, self).get_context_data(**kwargs)
+        temp = context['form'].save(commit=False)
+        context['form'] = PostForm(instance=temp)
+        return context
+
     def post(self, request, slug):
         if 'delete' in self.request.POST:
             post_delete = Post.objects.get(slug=slug)

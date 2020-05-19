@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base_layout.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Edit: {{ post.title }}</title>
-</head>
+{% block title %} Edit: {{ post.title }} {% endblock %}
 
-<body>
-    <form class="post_form" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" name="update" value="Update">
-        <input type="submit" name="delete" value="Delete">
-    </form>
-</body>
-
-</html>
+{% block content %}
+    <div class="edit-form">
+        <form method="post">
+            <div id="edit-post-align">
+                {% csrf_token %}
+                <p>Title:</p>
+                {{ form.title }}
+                <p>Desc: </p>
+                {{ form.desc }}
+            </div>
+            <div id="edit-form-buttons">
+                <input id="button" type="submit" name="update" value="Update">
+                <input id="button" type="submit" name="delete" value="Delete">
+            </div>
+        </form>
+    </div>
+{% endblock %}
