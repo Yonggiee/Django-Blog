@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views.generic.edit import CreateView
 
 from user.forms import SignUpForm
+from .commons import add_login_context
 
 class UserCreateView(CreateView):
     form_class = SignUpForm
@@ -23,7 +24,7 @@ class UserLoginView(LoginView):
 
     def get_context_data(self, **kwargs):
         context = super(UserLoginView, self).get_context_data(**kwargs)
-        context['login_form'] = AuthenticationForm()
+        context = add_login_context(context)
         return context
 
     def get_success_url(self):

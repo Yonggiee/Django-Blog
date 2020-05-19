@@ -1,9 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import ListView
 
 from post.forms import FilterForm
 from post.models import Post
+from .commons import add_login_context
 
 class ModeratorView(ListView):
     template_name = 'moderator.html'
@@ -11,6 +11,7 @@ class ModeratorView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ModeratorView, self).get_context_data(**kwargs)
+        context = add_login_context(context)
         context['form'] = ModeratorFilterForm()
 
         title_query = self.request.GET.get('title')

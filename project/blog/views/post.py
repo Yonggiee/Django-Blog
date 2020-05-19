@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
@@ -8,6 +7,7 @@ from comment.forms import CommentForm
 from comment.models import Comment
 from post.forms import PostForm
 from post.models import Post
+from .commons import add_login_context
 
 class PostDetailedView(DetailView):
     model = Post
@@ -16,8 +16,8 @@ class PostDetailedView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PostDetailedView, self).get_context_data(**kwargs)
+        context = add_login_context(context)
         context['comment_form'] = CommentForm()
-        context['login_form'] = AuthenticationForm()
         context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id)
 
         current_user = self.request.user.username
