@@ -1,20 +1,25 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base_layout.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Login</title>
-</head>
+{% block title %} Login {% endblock %}
 
-<body>
-    <form class="login_form" method="post">
+{% block content %}
+
+<div class="login-user">
+    <form method="post">
         {% csrf_token %}
-        {{ form }}
+        <div id="login-user-fields">
+            <h3>Username:</h3>
+            {{ form.username }}
+            <h3>Password:</h3>
+            {{ form.password }}
+        </div>
         {% if request.GET.next %}
             <input type="hidden" name="next" value="{{ request.GET.next }}">
         {% endif %}
-        <input type="submit" value="Login">
+        <div id="user-login-button">
+            <input id="button" type="submit" value="Login">
+        </div>
     </form>
-</body>
+</div>
 
-</html>
+{% endblock %}

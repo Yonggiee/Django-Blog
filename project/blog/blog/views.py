@@ -41,13 +41,13 @@ class HomeView(ListView):
         if user_query != '' and user_query is not None:
             posts = posts.filter(user__icontains=user_query)
         if date_from_day_query != '' and date_from_day_query is not None:
-            posts = posts.filter(last_modified__date__gte=date_from_day_query)
+            posts = posts.filter(last_modified__day__gte=date_from_day_query)
         if date_from_month_query != '' and date_from_month_query is not None:
             posts = posts.filter(last_modified__month__gte=date_from_month_query)
         if date_from_year_query != '' and date_from_year_query is not None:
             posts = posts.filter(last_modified__year__gte=date_from_year_query)
         if date_to_day_query != '' and date_to_day_query is not None:
-            posts = posts.filter(last_modified__date__lte=date_to_day_query)
+            posts = posts.filter(last_modified__day__lte=date_to_day_query)
         if date_to_month_query != '' and date_to_month_query is not None:
             posts = posts.filter(last_modified__month__lte=date_to_month_query)
         if date_to_year_query != '' and date_to_year_query is not None:
@@ -149,6 +149,7 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             post_delete = Post.objects.get(slug=slug)
             post_delete.is_trashed = True
             post_delete.save()
+            return HttpResponseRedirect(reverse('home'))
         return super(PostUpdateView, self).post(request, slug)
 
     def form_valid(self, form):
@@ -185,6 +186,11 @@ class UserCreateView(CreateView):
 
 class UserLoginView(LoginView):
     template_name = 'user_login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserLoginView, self).get_context_data(**kwargs)
+        context['login_form'] = AuthenticationForm()
+        return context
 
     def get_success_url(self):
         if 'next' in self.request.POST:
