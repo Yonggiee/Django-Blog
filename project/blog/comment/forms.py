@@ -11,10 +11,3 @@ class CommentForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['body'].widget.attrs['style']='resize:none;'
         self.fields['body'].widget.attrs['rows']=5
-
-# {% for field in form %}
-#         {{ field }}
-#         {% for error in field.errors %}
-#             <p>{{error}}</p>
-#         {% endfor %}
-#         {% endfor %}

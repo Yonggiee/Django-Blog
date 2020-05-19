@@ -63,6 +63,8 @@ class HomeView(ListView):
             password = request.POST['password']
             new_user = authenticate(username=username, password=password)
             login(self.request, new_user)
+        elif 'signup' in self.request.POST:
+            return HttpResponseRedirect(reverse('user_new'))
         return HttpResponseRedirect(self.request.path_info) 
 
 class PostDetailedView(DetailView):
@@ -92,6 +94,8 @@ class PostDetailedView(DetailView):
             password = request.POST['password']
             new_user = authenticate(username=username, password=password)
             login(self.request, new_user)
+        elif 'signup' in self.request.POST:
+            return HttpResponseRedirect(reverse('user_new'))
         else:
             form = CommentForm(request.POST)
             if request.user.is_anonymous:
@@ -104,7 +108,6 @@ class PostDetailedView(DetailView):
                 comment.save(using='PostsAndComments')
 
                 return HttpResponseRedirect(self.request.path_info)
-
             else:
                 return HttpResponse(form.errors) ##todo
 

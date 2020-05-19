@@ -4,6 +4,7 @@
 
 {% block content %}
 
+{% if not user.is_authenticated %}
 <div class="login-user">
     <form method="post">
         {% csrf_token %}
@@ -21,5 +22,6 @@
         </div>
     </form>
 </div>
+{% endif %}
 
 {% endblock %}

@@ -17,15 +17,19 @@
         </a>
 
         {% if user.is_authenticated %}
-        <form class="login-logout" method="post">
+        <form class="login-button" method="post">
             {% csrf_token %}
             <input type="submit" value="Logout" name="logout">
         </form>
         {% else %}
-        <form class="login-logout" method="post">
+        <form class="logout-button" method="post">
             {% csrf_token %}
             {{ login_form }}
             <input type="submit" value="Login" name="login">
+        </form>
+        <form class="goto-signup-button" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Signup" name="signup">
         </form>
         {% endif %}
     </div>
