@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
+from django.contrib.auth.forms import AuthenticationForm
 
 from comment.forms import CommentForm
 from comment.models import Comment
@@ -20,7 +21,8 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['form'] = FilterForm()
+        context['filter_form'] = FilterForm()
+        context['login_form'] = AuthenticationForm()
         return context
 
     def get_queryset(self):
@@ -56,6 +58,11 @@ class HomeView(ListView):
     def post(self, request):
         if 'logout' in self.request.POST:
             logout(request)
+        elif 'login' in self.request.POST:
+            username = request.POST['username']
+            password = request.POST['password']
+            new_user = authenticate(username=username, password=password)
+            login(self.request, new_user)
         return HttpResponseRedirect(self.request.path_info) 
 
 class PostDetailedView(DetailView):

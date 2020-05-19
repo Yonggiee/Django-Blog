@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
 from .views import HomeView, PostDetailedView, PostCreateView, PostUpdateView, UserCreateView, UserLoginView, ModeratorView
@@ -29,3 +30,5 @@ urlpatterns = [
     url(r'^(?P<slug>[\w-]+)/$', PostDetailedView.as_view(), name="detailed"),
     url(r'^edit/(?P<slug>[\w-]+)/$', PostUpdateView.as_view(), name="post_edit"),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

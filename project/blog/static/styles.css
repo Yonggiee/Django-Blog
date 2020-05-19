@@ -1,0 +1,166 @@
+body{
+    margin: 0;
+    background-color: rgb(232, 232, 232);
+}
+
+.home-filter{
+    overflow: auto;
+    background-size: cover;
+    margin-left: 25%;
+    width: 50%;
+    background-position: center center;
+    background-color: rgb(244, 244, 244);
+    margin-top: 70px;
+    padding:0;
+    color: grey;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.home-icon{
+    height: 30px;
+    margin-left: 30px;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+.menu-header{
+    height: 40px;
+    width: 100%;
+    background-color: rgb(64, 141, 224);
+    position: fixed;
+    top: 0px;
+}
+
+.login-logout{
+    display: inline-block;
+    right: 40px;
+    margin-top: 10px;
+    position: absolute;
+}
+
+.filter-part-1{
+    margin-left:7%;
+    float:left;
+    margin-top: 40px;
+}
+.filter-part-2{
+    margin-left:5%;
+    float:left;
+    margin-top: 5px;
+}
+.filter-part-3{
+    margin-left:5%;
+    float:left;
+    margin-top: 5px;
+    margin-right: 7%;
+}
+
+#buttons{
+    margin-left:43%;
+    margin-bottom: 20px;
+}
+
+#button{
+    background-color: rgb(64, 141, 224);
+    border-radius: 6px;
+    color: aliceblue;
+}
+
+#button:hover {
+  background-color: white; 
+  color: rgb(64, 141, 224);
+  border-color: rgb(64, 141, 224);
+}
+
+.posts{
+    margin-left: 5%;
+    width: 90%;
+    background-position: center center;
+    background-color: white;
+    padding:0;
+    color: grey;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 50px;
+    
+}
+
+#post-heading{
+    font-size: 25px;
+    float:left;
+    margin-right: 86%
+}
+
+.post-with-button{
+    margin-left: 5%;
+    display: inline-flex;
+    width: 95%;
+}
+
+#new-post-button{
+    margin-top: 20px;
+    margin-right: 5%;
+    background-color: rgb(64, 141, 224);
+    border-radius: 6px;
+    color: aliceblue;
+}
+
+table{
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    overflow-y:auto;
+    height: 350px;
+    display: block;
+    padding-top: 0px;
+}
+
+td a { 
+   display: block; 
+   padding-left: 30px; 
+   text-decoration: none;
+   color: grey;
+}
+
+#post-title{
+    width: 70%;
+}
+#post-user{
+    width: 15%;
+}
+#post-date{
+    width: 15%;
+}
+
+.post:hover{
+    background: rgb(192, 219, 252); 
+}
+
+td{
+    height: 50px;
+}
+
+#post-header{
+    background-color: rgb(72, 148, 230);
+    overflow: auto;
+    padding-left: 30px;
+    color: rgb(45, 45, 45);
+}
+
+#post-title-header{
+    width: 70%;
+    float:left;
+}
+#post-user-header{
+    width: 15%;
+    float:left;
+}
+#post-date-header{
+    width: 15%;
+    float:left;
+}

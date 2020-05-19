@@ -1,54 +1,89 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>Home</title>
+        <link rel="stylesheet" href="/static/styles.css">
     </head>
     <body>
 
-        {% if user.is_authenticated %}
-            <form class="user_form" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Logout" name="logout">
-            </form>
-        {% endif %}
+        <div class="menu-header">
+            <a href="{% url 'home' %}">
+                <img class="home-icon" src="{% static 'home-icon.png' %}"/>
+            </a>
 
-        <h1>This is the homepage</h1>
-
-        <a href="{% url 'post_new' %}">
             {% if user.is_authenticated %}
-                <button>New Post</button>
+                <form class="login-logout" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Logout" name="logout">
+                </form>
             {% else %}
-                <button>Login to post</button>
+                <form class="login-logout" method="post">
+                    {% csrf_token %}
+                    {{ login_form }}
+                    <input type="submit" value="Login" name="login">
+                </form>
             {% endif %}
-        </a>
+        </div>
 
-        <form class="filter_form" method="get">
-            {{ form.user }}
-            {{ form.title }}
-            {{ form.date_from_day }}
-            {{ form.date_from_month }}
-            {{ form.date_from_year }}
-            {{ form.date_to_day }}
-            {{ form.date_to_month }}
-            {{ form.date_to_year }}
-            <input type="submit" value="Search">
-        </form>
+        <div class="home-filter">
+            <form method="get">
+                <div class="filter-parts">
+                    <div class="filter-part-1">
+                        <p id="user-filter">Author:{{ filter_form.user }}</p>
+                        <p id="title-filter">Title:{{ filter_form.title }}</p>
+                    </div>
+                    <div class="filter-part-2">
+                        <p>From</p>
+                        <p id="user-filter">Day:{{ filter_formdate_from_day }}</p>
+                        <p id="user-filter">Month:{{ filter_form.date_from_month }}</p>
+                        <p id="user-filter">Year:{{ filter_form.date_from_year }}</p>
+                    </div>
+                    <div class="filter-part-3">
+                        <p>To</p>
+                        <p id="user-filter">Day:{{ filter_form.date_to_day }}</p>
+                        <p id="user-filter">Month:{{ filter_form.date_to_month }}</p>
+                        <p id="user-filter">Year:{{ filter_form.date_to_year }}</p>
+                    </div>
+                </div>
+                <div id="buttons">
+                    <input id="button" type="submit" value="Search">
+                    <a href="{% url 'home' %}">
+                        <button id="button">See All</button>
+                    </a>
+                </div>
+            </form>
+        </div>
 
-        <a href="{% url 'home' %}">
-            <button>See All</button>
-        </a>
+        <div class="post-with-button">
+            <h2 id="post-heading">Posts</h2>
+            <a href="{% url 'post_new' %}">
+                {% if user.is_authenticated %}
+                <button id="new-post-button">New Post</button>
+                {% else %}
+                <button id="new-post-button">Login to post</button>
+                {% endif %}
+            </a>
+        </div>
 
         <div class="posts">
-            {% for post in posts %}
-                <div class="post">
-                    <h2><a href="{% url 'detailed' slug=post.slug %}">{{ post.title }}</a></h2>
-                    <p>{{ post.desc }}</p>
-                    <p>{{ post.user }}</p>
-                    <p>{{ post.is_trashed }}</p>
-                    <p>{{ post.last_modified }}</p>
-                </div>
-            {% endfor %}
+            <div id="post-header">
+                <p id="post-title-header">Title</p>
+                <p id="post-user-header">Author</p>
+                <p id="post-date-header">Last Modified</p>
+            </div>
+
+            <table CELLSPACING=0>
+                {% for post in posts %}
+                <tr class=post>
+                    <td id="post-title"><a href="{% url 'detailed' slug=post.slug %}">{{ post.title }}</a></td>
+                    <td id="post-user"><a href="{% url 'detailed' slug=post.slug %}">{{ post.user }}</a></td>
+                    <td id="post-date"><a href="{% url 'detailed' slug=post.slug %}">{{ post.last_modified }}</a></td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
     </body>
 </html>
