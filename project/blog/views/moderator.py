@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import ListView
 
-from post.forms import FilterForm
+from forms.post import FilterForm
 from post.models import Post
 from .commons import add_login_context
 

@@ -3,9 +3,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from comment.forms import CommentForm
+from forms.comment import CommentForm
+from forms.post import PostForm
 from comment.models import Comment
-from post.forms import PostForm
 from post.models import Post
 from .commons import add_login_context
 

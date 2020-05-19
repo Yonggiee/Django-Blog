@@ -2,7 +2,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.views.generic.edit import CreateView
 
-from user.forms import SignUpForm
+from forms.user import SignUpForm
 from .commons import add_login_context
 
 class UserCreateView(CreateView):

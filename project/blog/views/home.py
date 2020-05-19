@@ -3,7 +3,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView
 
-from post.forms import FilterForm
+from forms.post import FilterForm
 from post.models import Post
 from .commons import add_login_context
 
@@ -24,16 +24,16 @@ class HomeView(ListView):
         return filtered_posts
 
     def post(self, request):
-        if 'logout' in self.request.POST:
+        if 'logout' in request.POST:
             logout(request)
-        elif 'login' in self.request.POST:
+        elif 'login' in request.POST:
             username = request.POST['username']
             password = request.POST['password']
             new_user = authenticate(username=username, password=password)
-            login(self.request, new_user)
-        elif 'signup' in self.request.POST:
+            login(request, new_user)
+        elif 'signup' in request.POST:
             return HttpResponseRedirect(reverse('user_new'))
-        return HttpResponseRedirect(self.request.path_info) 
+        return HttpResponseRedirect(request.path_info)
 
     # helper functions
 
