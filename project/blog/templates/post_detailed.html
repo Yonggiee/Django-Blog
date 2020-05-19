@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base_layout.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <title>{{ post.title }}</title>
-</head>
+{% block title %} {{ post.title }} {% endblock %}
 
-<body>
+{% block content %}
     <h3>{{ post.is_trashed }} </h3>
 
     <div class="post">
@@ -35,13 +31,11 @@
     </div>
     <form class="comment_form" method="post">
         {% csrf_token %}
-        {{ form }}
+        {{ comment_form }}
         {% if user.is_authenticated %}
-            <input type="submit" value="Submit">
+            <input type="submit" value="Comment">
         {% else %}
             <input type="submit" value="Login to comment">
         {% endif %}
     </form>
-</body>
-
-</html>
+{% endblock %}

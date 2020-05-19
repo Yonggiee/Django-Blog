@@ -72,7 +72,8 @@ class PostDetailedView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PostDetailedView, self).get_context_data(**kwargs)
-        context['form'] = CommentForm()
+        context['comment_form'] = CommentForm()
+        context['login_form'] = AuthenticationForm()
         context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id)
 
         current_user = self.request.user.username
@@ -84,19 +85,30 @@ class PostDetailedView(DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
-        if request.user.is_anonymous:
-            return HttpResponseRedirect(reverse('user_login') + '?next=/' + kwargs['slug'])
-
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.post_id = self.get_object().id
-            comment.save(using='PostsAndComments')
-
-            return HttpResponseRedirect(self.request.path_info)
+        if 'logout' in self.request.POST:
+            logout(request)
+        elif 'login' in self.request.POST:
+            username = request.POST['username']
+            password = request.POST['password']
+            new_user = authenticate(username=username, password=password)
+            login(self.request, new_user)
         else:
-            return HttpResponse(form.errors) ##todo
+            form = CommentForm(request.POST)
+            if request.user.is_anonymous:
+                return HttpResponseRedirect(reverse('user_login') + '?next=/' + kwargs['slug'])
+
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.user = request.user
+                comment.post_id = self.get_object().id
+                comment.save(using='PostsAndComments')
+
+                return HttpResponseRedirect(self.request.path_info)
+
+            else:
+                return HttpResponse(form.errors) ##todo
+
+        return HttpResponseRedirect(self.request.path_info) 
             
 
 class PostCreateView(LoginRequiredMixin, CreateView):
