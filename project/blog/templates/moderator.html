@@ -5,54 +5,78 @@
 {% block content %}
 
     {% if user.is_superuser %}
-
-        <form class="filter_form" method="get">
-            {{ form.user }}
-            {{ form.title }}
-            {{ form.date_from_day }}
-            {{ form.date_from_month }}
-            {{ form.date_from_year }}
-            {{ form.date_to_day }}
-            {{ form.date_to_month }}
-            {{ form.date_to_year }}
-            {{ form.is_deleted }}
-            {{ form.to_search }}
-            <input type="submit" value="Search">
-        </form>
-
-        <a href="{% url 'moderator' %}">
-            <button>See All</button>
-        </a>
+        <div class="moderator-filter">
+            <form method="get">
+                <p>Author: {{ form.user }}</p>
+                <p>Title: {{ form.title }}</p>
+                <p> From </p>
+                <p>Day: {{ form.date_from_day }}</p>
+                <p>Month: {{ form.date_from_month }}</p>
+                <p>Year: {{ form.date_from_year }}</p>
+                <p> To </p>
+                <p>Day: {{ form.date_to_day }}</p>
+                <p>Month: {{ form.date_to_month }}</p>
+                <p>Year: {{ form.date_to_year }}</p>
+                <p>Is Deleted: {{ form.is_deleted }}</p>
+                <p>To Search: {{ form.to_search }}</p>
+                <input type="submit" value="Search" name="filter">
+            </form>
+        </div>
 
         <div class="posts">
-            {% for post in posts %}
-                <div class="post">
-                    <h2><a href="{% url 'detailed' slug=post.slug %}">{{ post.title }}</a></h2>
-                    <p>{{ post.user }}</p>
-                    <p>{{ post.last_modified }}</p>
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="comments">
-            {% for comment in comments %}
-            <div class="comment">
-                <p>{{ comment.body }}</p>
-                <p>{{ post.user }}</p>
+            <div id="post-header">
+                <p id="moderator-post-title-header">Title</p>
+                <p id="moderator-post-user-header">Author</p>
+                <p id="moderator-post-trash-header">Is_Deleted</p>
             </div>
-            {% endfor %}
+
+            <table CELLSPACING=0>
+                {% for post in posts %}
+                <tr class="post-table">
+                    <td id="moderator-post-title">{{ post.title }}</td>
+                    <td id="moderator-post-user">{{ post.user }}</td>
+                    <td id="moderator-post-trash">{{ post.is_trashed }}</td>
+                    <td id="moderator-post-button">
+                        {% if post.is_trashed == True %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <input id="button" type="submit" name="recover" value="Recover">
+                                </div>
+                            </form>
+                        {% else %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <input id="button" type="submit" name="delete" value="Delete">
+                                </div>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
 
-        <br>
-        <br>
-
-        <div class="comments">
-            {% for comment in comments %}
-                <div class="comment">
-                    <p>{{ comment.user }}</p>
-                    <p>{{ comment.last_modified }}</p>
-                </div>
-            {% endfor %}
+        <div class="posts">
+            <div id="post-header">
+                <p id="post-title-header">Title</p>
+                <p id="post-title-header">Comment</p>
+                <p id="post-user-header">Author</p>
+                <p id="post-date-header">Last Modified</p>
+                <p id="post-date-header">Is_Deleted</p>
+            </div>
+        
+            <table CELLSPACING=0>
+                {% for comment in comments %}
+                <tr class="post-table">
+                    <td id="post-title">{{ comment.post.title }}</td>
+                    <td id="post-title">{{ comment.body }}</td>
+                    <td id="post-user">{{ comment.user }}</td>
+                    <td id="post-date">{{ comment.last_modified }}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
 
     {% else %}

@@ -43,7 +43,7 @@
                 {% for comment in comments %}
                 <div class="comment">
                     <p>{{ comment.body }}</p>
-                    <p id="detailed-comment-user">By:{{ post.user }}</p>
+                    <p id="detailed-comment-user">By:{{ comment.user }}</p>
                 </div>
                 {% endfor %}
             </div>

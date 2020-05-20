@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView
 
+from comment.models import Comment
 from forms.moderator import ModeratorFilterForm
 from post.models import Post
 from .commons import add_login_context
@@ -8,6 +10,19 @@ from .commons import add_login_context
 class ModeratorView(ListView):
     template_name = 'moderator.html'
     model = Post
+
+    def post(self, request):
+        if 'delete' in request.POST:
+            post_id = request.POST.get('post_id')
+            post = Post.objects.get(id=post_id)
+            post.is_trashed = True
+            post.save()
+        elif 'recover' in request.POST:
+            post_id = request.POST.get('post_id')
+            post = Post.objects.get(id=post_id)
+            post.is_trashed = False
+            post.save()
+        return HttpResponseRedirect(request.path_info)
 
     def get_context_data(self, **kwargs):
         context = super(ModeratorView, self).get_context_data(**kwargs)
@@ -34,13 +49,13 @@ class ModeratorView(ListView):
             if user_query != '' and user_query is not None:
                 comments = comments.filter(user__icontains=user_query)
             if date_from_day_query != '' and date_from_day_query is not None:
-                posts = posts.filter(last_modified__date__gte=date_from_day_query)
+                posts = posts.filter(last_modified__day__gte=date_from_day_query)
             if date_from_month_query != '' and date_from_month_query is not None:
                 posts = posts.filter(last_modified__month__gte=date_from_month_query)
             if date_from_year_query != '' and date_from_year_query is not None:
                 posts = posts.filter(last_modified__year__gte=date_from_year_query)
             if date_to_day_query != '' and date_to_day_query is not None:
-                posts = posts.filter(last_modified__date__lte=date_to_day_query)
+                posts = posts.filter(last_modified__day__lte=date_to_day_query)
             if date_to_month_query != '' and date_to_month_query is not None:
                 posts = posts.filter(last_modified__month__lte=date_to_month_query)
             if date_to_year_query != '' and date_to_year_query is not None:
@@ -60,13 +75,13 @@ class ModeratorView(ListView):
             if user_query != '' and user_query is not None:
                 posts = posts.filter(user__icontains=user_query)
             if date_from_day_query != '' and date_from_day_query is not None:
-                posts = posts.filter(last_modified__date__gte=date_from_day_query)
+                posts = posts.filter(last_modified__day__gte=date_from_day_query)
             if date_from_month_query != '' and date_from_month_query is not None:
                 posts = posts.filter(last_modified__month__gte=date_from_month_query)
             if date_from_year_query != '' and date_from_year_query is not None:
                 posts = posts.filter(last_modified__year__gte=date_from_year_query)
             if date_to_day_query != '' and date_to_day_query is not None:
-                posts = posts.filter(last_modified__date__lte=date_to_day_query)
+                posts = posts.filter(last_modified__day__lte=date_to_day_query)
             if date_to_month_query != '' and date_to_month_query is not None:
                 posts = posts.filter(last_modified__month__lte=date_to_month_query)
             if date_to_year_query != '' and date_to_year_query is not None:

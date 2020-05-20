@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -20,7 +21,7 @@ class PostDetailedView(DetailView):
         context = super(PostDetailedView, self).get_context_data(**kwargs)
         context = add_login_context(context)
         context['comment_form'] = kwargs.get('comment_form', CommentForm())
-        context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id)
+        context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id).order_by('-last_modified')
 
         current_user = self.request.user.username
         slug = self.kwargs['slug']
@@ -47,7 +48,7 @@ class PostDetailedView(DetailView):
 
             if form.is_valid():
                 comment = form.save(commit=False)
-                comment.user = request.user
+                comment.user = request.user.username
                 comment.post_id = self.get_object().id
                 comment.save(using='PostsAndComments')
 
@@ -58,9 +59,10 @@ class PostDetailedView(DetailView):
                 slug = self.kwargs['slug']
                 post_user = Post.objects.get(slug=slug).user
                 is_post_user = current_user == post_user
-
+                comments = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id).order_by('-last_modified')
                 is_superuser = self.request.user.is_superuser
-                return render(request, self.template_name, {'comment_form':form, 'post': self.get_object(), 'is_post_user': is_post_user, 'is_superuser': is_superuser})
+
+                return render(request, self.template_name, {'comment_form':form, 'post': self.get_object(),             'is_post_user': is_post_user, 'is_superuser': is_superuser, 'comments':comments})
 
         return HttpResponseRedirect(self.request.path_info) 
             
@@ -84,6 +86,17 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return self.post_instance.get_absolute_url()
 
+    def post(self, request, *args, **kwargs):
+        if 'logout' in self.request.POST:
+            logout(request)
+            return HttpResponseRedirect(reverse('home'))
+        return super(PostCreateView, self).post(request)
+
+    def get(self, request):
+        if 'moderator' in request.GET:
+            return HttpResponseRedirect(reverse('moderator'))
+        return super(PostCreateView, self).get(request)
+
 class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
@@ -94,13 +107,21 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         context = super(PostUpdateView, self).get_context_data(**kwargs)
         return context
 
-    def post(self, request, slug):
-        if 'delete' in self.request.POST:
+    def post(self, request, *args, **kwargs):
+        if 'logout' in request.POST:
+            logout(request)
+            return HttpResponseRedirect(reverse('home'))
+        if 'delete' in request.POST:
             post_delete = Post.objects.get(slug=slug)
             post_delete.is_trashed = True
             post_delete.save()
             return HttpResponseRedirect(reverse('home'))
-        return super(PostUpdateView, self).post(request, slug)
+        return super(PostUpdateView, self).post(request)
+    
+    def get(self, request, *args, **kwargs):
+        if 'moderator' in request.GET:
+            return HttpResponseRedirect(reverse('moderator'))
+        return super(PostUpdateView, self).get(request)
 
     def form_valid(self, form):
         post = form.save(commit=False)

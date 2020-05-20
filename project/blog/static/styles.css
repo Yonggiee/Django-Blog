@@ -210,8 +210,9 @@ td{
 
 .detailed-right{
     margin-left: 40px;
-    margin-right: 20px;
+    margin-right: 30px;
     height: 550px;
+    width: 35%;
 }
 
 #detail-left-left{
@@ -334,4 +335,50 @@ td{
     border-color: rgb(206, 206, 206);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: white;
+}
+
+/* moderator view */
+
+.moderator-filter{
+    overflow: auto;
+    background-size: cover;
+    margin-left: 25%;
+    width: 50%;
+    background-position: center center;
+    background-color: white;
+    margin-top: 70px;
+    padding:0;
+    color: grey;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(206, 206, 206);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#moderator-post-title{
+    width: 70%;
+}
+
+#moderator-post-user{
+    width: 15%;
+}
+#moderator-post-trash{
+    width: 15%;
+}
+
+#moderator-post-title-header{
+    width: 70%;
+    float:left;
+}
+#moderator-post-user-header{
+    width: 15%;
+    float:left;
+}
+
+#moderator-post-trash-header{
+    width: 15%;
+    float:left;
+}
+#moderator-post-button{
+    float:left
 }
