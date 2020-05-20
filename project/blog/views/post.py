@@ -1,5 +1,6 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import Http404
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -14,7 +15,7 @@ from forms.comment import CommentForm
 from forms.post import PostForm, MultipleUploadForm
 from comment.models import Comment
 from post.models import Post
-from .commons import add_login_context
+from .commons import add_login_context, handle_login
 
 class PostDetailedView(DetailView):
     model = Post
@@ -36,44 +37,45 @@ class PostDetailedView(DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
-        if 'logout' in self.request.POST:
+        if 'logout' in request.POST:
             logout(request)
-        elif 'login' in self.request.POST:
-            username = request.POST['username']
-            password = request.POST['password']
-            new_user = authenticate(username=username, password=password)
-            login(self.request, new_user)
-        elif 'signup' in self.request.POST:
+        elif 'login' in request.POST:
+            handle_login(request)
+        elif 'signup' in request.POST:
             return HttpResponseRedirect(reverse('user_new'))
         else:
-            form = CommentForm(request.POST)
             if request.user.is_anonymous:
                 return HttpResponseRedirect(reverse('user_login') + '?next=/' + kwargs['slug'])
-
+            form = CommentForm(request.POST)
             if form.is_valid():
-                comment = form.save(commit=False)
-                comment.user = request.user.username
-                comment.post_id = self.get_object().id
-                comment.save()
-
-                return HttpResponseRedirect(self.request.path_info)
+                self.save_comment(request, form)
+                return HttpResponseRedirect(request.path_info)
             else:
-                form = CommentForm(request.POST or None)
-                current_user = self.request.user.username
-                slug = self.kwargs['slug']
-                post_user = Post.objects.get(slug=slug).user
-                is_post_user = current_user == post_user
-                comments = Comment.objects.filter(post=self.get_object().id).order_by('-last_modified')
-                is_superuser = self.request.user.is_superuser
+                context = get_current_context(request)
+                return render(request, template_name, context)
+        return HttpResponseRedirect(request.path_info) 
 
-                return render(request, self.template_name, {'comment_form':form, 'post': self.get_object(),             'is_post_user': is_post_user, 'is_superuser': is_superuser, 'comments':comments})
+    #### helper functions
 
-        return HttpResponseRedirect(self.request.path_info) 
+    def save_comment(self, request, form):
+        comment = form.save(commit=False)
+        comment.user = request.user.username
+        comment.post_id = self.get_object().id
+        comment.save()
 
+    def get_current_context(self, request):
+        form = CommentForm(request.POST)
+        current_user = request.user.username
+        slug = kwargs['slug']
+        post_user = Post.objects.get(slug=slug).user
+        is_post_user = current_user == post_user
+        comments = Comment.objects.filter(post=get_object().id).order_by('-last_modified')
+        is_superuser = request.user.is_superuser
 
+        return {'comment_form':form, 'post': get_object(),
+            'is_post_user': is_post_user, 'is_superuser': is_superuser, 'comments':comments}
         
             
-
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'post_new.html'
@@ -114,23 +116,24 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         try:
             excel_file = request.FILES['file']
         except MultiValueDictKeyError:
-            raise MultiValueDictKeyError("WHAT")
+            raise MultiValueDictKeyError("No file is included")
         
         if (str(excel_file).split('.')[-1] == "xls"):
             data = xls_get(excel_file, column_limit=2)['Sheet1']
         elif (str(excel_file).split('.')[-1] == "xlsx"):
             data = xlsx_get(excel_file, column_limit=2)['Sheet1']
-        
+        else:
+            raise Http404("this is not an excel file")
         user = request.user
-
+        self.save_data(data, user)
+        
+    def save_data(self, data, user):
         for row in data:
             if row[0] == 'Title':
                 continue
             if len(row) == 2:
-                if (row[0] != '' or row[0] == None) and (row[1] != '' or row[0] == None):
+                if (row[0] != '') and (row[1] != ''):
                     Post.objects.create(user=user, title=row[0], desc=row[1])
-
-
 
 class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Post

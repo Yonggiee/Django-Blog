@@ -1,11 +1,11 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import logout
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView
 
 from forms.home import FilterForm
 from post.models import Post
-from .commons import add_login_context
+from .commons import add_login_context, handle_login
 
 class HomeView(ListView):
     model = Post
@@ -27,10 +27,7 @@ class HomeView(ListView):
         if 'logout' in request.POST:
             logout(request)
         elif 'login' in request.POST:
-            username = request.POST['username']
-            password = request.POST['password']
-            new_user = authenticate(username=username, password=password)
-            login(request, new_user)
+            handle_login(request)
         elif 'signup' in request.POST:
             return HttpResponseRedirect(reverse('user_new'))
         return HttpResponseRedirect(request.path_info)
