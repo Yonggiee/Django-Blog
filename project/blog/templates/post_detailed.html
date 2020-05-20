@@ -30,6 +30,7 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ comment_form.body }}
+                    {{ comment_form.body.errors }}
                     {% if user.is_authenticated %}
                         <input id="button" type="submit" value="Comment">
                     {% else %}

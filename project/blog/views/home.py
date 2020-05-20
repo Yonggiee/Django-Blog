@@ -35,6 +35,11 @@ class HomeView(ListView):
             return HttpResponseRedirect(reverse('user_new'))
         return HttpResponseRedirect(request.path_info)
 
+    def get(self, request):
+        if 'moderator' in request.GET:
+            return HttpResponseRedirect(reverse('moderator'))
+        return super(HomeView, self).get(request)
+
     # helper functions
 
     def apply_query_fields(self, posts):

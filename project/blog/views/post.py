@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http.response import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -17,7 +19,7 @@ class PostDetailedView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(PostDetailedView, self).get_context_data(**kwargs)
         context = add_login_context(context)
-        context['comment_form'] = CommentForm()
+        context['comment_form'] = kwargs.get('comment_form', CommentForm())
         context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id)
 
         current_user = self.request.user.username
@@ -51,7 +53,14 @@ class PostDetailedView(DetailView):
 
                 return HttpResponseRedirect(self.request.path_info)
             else:
-                return HttpResponse(form.errors) ##todo
+                form = CommentForm(request.POST or None)
+                current_user = self.request.user.username
+                slug = self.kwargs['slug']
+                post_user = Post.objects.get(slug=slug).user
+                is_post_user = current_user == post_user
+
+                is_superuser = self.request.user.is_superuser
+                return render(request, self.template_name, {'comment_form':form, 'post': self.get_object(), 'is_post_user': is_post_user, 'is_superuser': is_superuser})
 
         return HttpResponseRedirect(self.request.path_info) 
             
@@ -59,13 +68,11 @@ class PostDetailedView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'post_new.html'
-    fields = PostForm().fields
+    form_class = PostForm
     login_url = '/login/'
 
     def get_context_data(self, **kwargs):
         context = super(PostCreateView, self).get_context_data(**kwargs)
-        temp = context['form'].save(commit=False)
-        context['form'] = PostForm(instance=temp)
         return context
 
     def form_valid(self, form):
@@ -79,14 +86,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Post
-    fields = PostForm().fields
+    form_class = PostForm
     template_name = 'post_edit.html'
     login_url = '/login/'
 
     def get_context_data(self, **kwargs):
         context = super(PostUpdateView, self).get_context_data(**kwargs)
-        temp = context['form'].save(commit=False)
-        context['form'] = PostForm(instance=temp)
         return context
 
     def post(self, request, slug):

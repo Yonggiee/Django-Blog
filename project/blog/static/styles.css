@@ -35,6 +35,13 @@
     display: inline-block;
 }
 
+.goto-moderator-button{
+    display: inline-block;
+    right: 110px;
+    margin-top: 10px;
+    position: absolute;
+}
+
 /* Common */
 body{
     margin: 0;
