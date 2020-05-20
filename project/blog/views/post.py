@@ -3,11 +3,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
+from pyexcel_xls import get_data as xls_get
+from pyexcel_xlsx import get_data as xlsx_get
+
 from forms.comment import CommentForm
-from forms.post import PostForm
+from forms.post import PostForm, MultipleUploadForm
 from comment.models import Comment
 from post.models import Post
 from .commons import add_login_context
@@ -21,7 +25,7 @@ class PostDetailedView(DetailView):
         context = super(PostDetailedView, self).get_context_data(**kwargs)
         context = add_login_context(context)
         context['comment_form'] = kwargs.get('comment_form', CommentForm())
-        context['comments'] = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id).order_by('-last_modified')
+        context['comments'] = Comment.objects.filter(post=self.get_object().id).order_by('-last_modified')
 
         current_user = self.request.user.username
         slug = self.kwargs['slug']
@@ -50,7 +54,7 @@ class PostDetailedView(DetailView):
                 comment = form.save(commit=False)
                 comment.user = request.user.username
                 comment.post_id = self.get_object().id
-                comment.save(using='PostsAndComments')
+                comment.save()
 
                 return HttpResponseRedirect(self.request.path_info)
             else:
@@ -59,12 +63,15 @@ class PostDetailedView(DetailView):
                 slug = self.kwargs['slug']
                 post_user = Post.objects.get(slug=slug).user
                 is_post_user = current_user == post_user
-                comments = Comment.objects.using('PostsAndComments').filter(post=self.get_object().id).order_by('-last_modified')
+                comments = Comment.objects.filter(post=self.get_object().id).order_by('-last_modified')
                 is_superuser = self.request.user.is_superuser
 
                 return render(request, self.template_name, {'comment_form':form, 'post': self.get_object(),             'is_post_user': is_post_user, 'is_superuser': is_superuser, 'comments':comments})
 
         return HttpResponseRedirect(self.request.path_info) 
+
+
+        
             
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -75,6 +82,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(PostCreateView, self).get_context_data(**kwargs)
+        context['multi_upload'] = MultipleUploadForm()
         return context
 
     def form_valid(self, form):
@@ -87,8 +95,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return self.post_instance.get_absolute_url()
 
     def post(self, request, *args, **kwargs):
-        if 'logout' in self.request.POST:
+        if 'logout' in request.POST:
             logout(request)
+            return HttpResponseRedirect(reverse('home'))
+        elif 'multiple' in request.POST:
+            self.handle_input_file(request)
             return HttpResponseRedirect(reverse('home'))
         return super(PostCreateView, self).post(request)
 
@@ -96,6 +107,30 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         if 'moderator' in request.GET:
             return HttpResponseRedirect(reverse('moderator'))
         return super(PostCreateView, self).get(request)
+
+    ## helper functions
+
+    def handle_input_file(self, request):
+        try:
+            excel_file = request.FILES['file']
+        except MultiValueDictKeyError:
+            raise MultiValueDictKeyError("WHAT")
+        
+        if (str(excel_file).split('.')[-1] == "xls"):
+            data = xls_get(excel_file, column_limit=2)['Sheet1']
+        elif (str(excel_file).split('.')[-1] == "xlsx"):
+            data = xlsx_get(excel_file, column_limit=2)['Sheet1']
+        
+        user = request.user
+
+        for row in data:
+            if row[0] == 'Title':
+                continue
+            if len(row) == 2:
+                if (row[0] != '' or row[0] == None) and (row[1] != '' or row[0] == None):
+                    Post.objects.create(user=user, title=row[0], desc=row[1])
+
+
 
 class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Post
@@ -111,7 +146,7 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         if 'logout' in request.POST:
             logout(request)
             return HttpResponseRedirect(reverse('home'))
-        if 'delete' in request.POST:
+        elif 'delete' in request.POST:
             post_delete = Post.objects.get(slug=slug)
             post_delete.is_trashed = True
             post_delete.save()

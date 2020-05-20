@@ -19,7 +19,7 @@ class HomeView(ListView):
         return context
 
     def get_queryset(self):
-        posts = Post.objects.using('PostsAndComments').filter(is_trashed=False).order_by('-last_modified')
+        posts = Post.objects.filter(is_trashed=False).order_by('-last_modified')
         filtered_posts = self.apply_query_fields(posts)
         return filtered_posts
 

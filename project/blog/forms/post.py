@@ -15,4 +15,5 @@ class PostForm(ModelForm):
         self.fields['desc'].widget.attrs['style']='resize:none;'
         self.fields['desc'].widget.attrs['rows']=35
 
-
+class MultipleUploadForm(forms.Form):
+    file = forms.FileField()

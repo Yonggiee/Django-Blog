@@ -14,8 +14,13 @@
                 {{ form.desc }}
             </div>
             <div id="new-form-buttons">
-                <input id="button" type="submit" value="Create">
+                <input id="button" type="submit" value="Create" name="single">
             </div>
+        </form>
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ multi_upload.file }}
+            <input id="button" type="submit" value="Multiple Upload" name="multiple">
         </form>
     </div>
 {% endblock %}
