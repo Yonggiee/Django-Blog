@@ -13,6 +13,7 @@
             <div class="filter-part-2">
                 <p>From</p>
                 <p id="user-filter">Day:{{ filter_form.date_from_day }}</p>
+                <p>{{ filter_form.date_from_day.errors }} </p>
                 <p id="user-filter">Month:{{ filter_form.date_from_month }}</p>
                 <p id="user-filter">Year:{{ filter_form.date_from_year }}</p>
             </div>
@@ -24,7 +25,7 @@
             </div>
         </div>
         <div id="buttons">
-            <input id="button" type="submit" value="Search">
+            <input id="button" type="submit" value="Search" name="filter">
         </div>
     </form>
 </div>
