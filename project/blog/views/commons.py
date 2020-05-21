@@ -6,7 +6,6 @@ def add_login_context(context):
     return context
 
 def handle_login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    new_user = authenticate(username=username, password=password)
-    login(request, new_user)
+    form = AuthenticationForm(data=request.POST)
+    if form.is_valid():
+        login(request, form.get_user())

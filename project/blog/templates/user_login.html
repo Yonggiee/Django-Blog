@@ -14,6 +14,9 @@
             <h3>Password:</h3>
             {{ form.password }}
         </div>
+        {% for error in form.non_field_errors %}
+            <p>{{error}}</p>
+        {% endfor %}
         {% if request.GET.next %}
             <input type="hidden" name="next" value="{{ request.GET.next }}">
         {% endif %}

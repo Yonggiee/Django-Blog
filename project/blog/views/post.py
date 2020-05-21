@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -32,8 +32,7 @@ class PostDetailedView(DetailView):
         slug = self.kwargs['slug']
         post_user = Post.objects.get(slug=slug).user
         context['is_post_user'] = current_user == post_user
-
-        context['is_superuser']= self.request.user.is_superuser
+        self.past_context = context
         return context
     
     def post(self, request, *args, **kwargs):
@@ -51,8 +50,8 @@ class PostDetailedView(DetailView):
                 self.save_comment(request, form)
                 return HttpResponseRedirect(request.path_info)
             else:
-                context = get_current_context(request)
-                return render(request, template_name, context)
+                context = self.get_current_context(request)
+                return render(request, self.template_name, context)
         return HttpResponseRedirect(request.path_info) 
 
     #### helper functions
@@ -66,14 +65,13 @@ class PostDetailedView(DetailView):
     def get_current_context(self, request):
         form = CommentForm(request.POST)
         current_user = request.user.username
-        slug = kwargs['slug']
+        slug = self.kwargs['slug']
         post_user = Post.objects.get(slug=slug).user
         is_post_user = current_user == post_user
-        comments = Comment.objects.filter(post=get_object().id).order_by('-last_modified')
-        is_superuser = request.user.is_superuser
+        comments = Comment.objects.filter(post=self.get_object().id).order_by('-last_modified')
 
-        return {'comment_form':form, 'post': get_object(),
-            'is_post_user': is_post_user, 'is_superuser': is_superuser, 'comments':comments}
+        return {'comment_form':form, 'post': self.get_object(),
+            'is_post_user': is_post_user, 'comments':comments}
         
             
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -93,6 +91,10 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         self.post_instance = post
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form."""
+        return self.render_to_response(self.get_context_data(form=form))
+
     def get_success_url(self):
         return self.post_instance.get_absolute_url()
 
@@ -101,7 +103,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
             logout(request)
             return HttpResponseRedirect(reverse('home'))
         elif 'multiple' in request.POST:
-            self.handle_input_file(request)
+            messages = self.handle_input_file(request)
+            has_error = messages['has_error']
+            if has_error:
+                form = MultipleUploadForm(request.POST)
+                return self.form_invalid(form=form)
+
             return HttpResponseRedirect(reverse('home'))
         return super(PostCreateView, self).post(request)
 
@@ -116,8 +123,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         try:
             excel_file = request.FILES['file']
         except MultiValueDictKeyError:
-            raise MultiValueDictKeyError("No file is included")
-        
+            raise MultiValueDictKeyError("MultiValueDictKeyError")
         if (str(excel_file).split('.')[-1] == "xls"):
             data = xls_get(excel_file, column_limit=2)['Sheet1']
         elif (str(excel_file).split('.')[-1] == "xlsx"):
@@ -125,15 +131,40 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         else:
             raise Http404("this is not an excel file")
         user = request.user
-        self.save_data(data, user)
+        return self.save_data(data, user)
         
     def save_data(self, data, user):
+        row_num = 1
+        missing_errors = []
+        title_errors = []
+        success_message = []
+        has_error = False
+        
         for row in data:
-            if row[0] == 'Title':
-                continue
             if len(row) == 2:
-                if (row[0] != '') and (row[1] != ''):
-                    Post.objects.create(user=user, title=row[0], desc=row[1])
+                if row[0] == 'Title':
+                    continue
+                title = row[0]
+                desc = row[1]
+                new_post = Post(title=title, user=user, desc=desc)
+                try:
+                    new_post.full_clean()
+                except ValidationError as e:
+                        for message in e.messages:
+                            title_errors.append("row " + str(row_num) + ": " + message)
+                        has_error = True
+                else:
+                    success_message.append(title + " is saved")
+                    new_post.save()
+            else:
+                missing_errors.append("missing title/desc in row " + str(row_num))
+                has_error = True
+            row_num = row_num + 1
+        
+        messages = {'general_error':missing_errors, 'title_error':title_errors,
+            'success':success_message, 'has_error':has_error}
+
+        return messages       
 
 class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Post
@@ -150,6 +181,7 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             logout(request)
             return HttpResponseRedirect(reverse('home'))
         elif 'delete' in request.POST:
+            slug = self.kwargs['slug']
             post_delete = Post.objects.get(slug=slug)
             post_delete.is_trashed = True
             post_delete.save()
