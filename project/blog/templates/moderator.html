@@ -42,7 +42,7 @@
                         {% if post.is_trashed %}
                             <form method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <input type="hidden" name="id" value="{{ post.id }}">
                                 <input id="button" type="submit" name="post-recover" value="Recover">
                                 </div>
                             </form>
@@ -82,7 +82,7 @@
                         {% if comment.is_trashed %}
                         <form method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <input type="hidden" name="id" value="{{ comment.id }}">
                             <input id="button" type="submit" name="comment-recover" value="Recover">
                             </div>
                         </form>
