@@ -478,3 +478,7 @@ td{
 #moderator-comment-trash{
     width: 12%;
 }
+#moderator-type-heading{
+    margin-left:15%;
+    font-size: 25px;
+}
