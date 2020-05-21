@@ -4,6 +4,24 @@
 
 {% block content %}
     <div class="post-form">
+        {% if messages %}
+            <h3>Success:</h3>
+            <ul class="messages">
+                {% for message in messages %}
+                    {% if "success" in message.tags %}
+                    <li>{{ message }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <h3>Errors:</h3>
+            <ul class="messages">
+                {% for message in messages %}
+                    {% if "invalid_data" in message.tags %}
+                        <li>{{ message }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
         <form method="post">
             <div id="post-align">
                 {% csrf_token %}

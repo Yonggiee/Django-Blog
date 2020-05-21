@@ -1,3 +1,5 @@
+from django.contrib import messages
+
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError
@@ -103,13 +105,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
             logout(request)
             return HttpResponseRedirect(reverse('home'))
         elif 'multiple' in request.POST:
-            messages = self.handle_input_file(request)
-            has_error = messages['has_error']
-            if has_error:
-                form = MultipleUploadForm(request.POST)
-                return self.form_invalid(form=form)
-
-            return HttpResponseRedirect(reverse('home'))
+            self.handle_input_file(request)
+            return HttpResponseRedirect(request.path_info) 
         return super(PostCreateView, self).post(request)
 
     def get(self, request):
@@ -129,7 +126,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         elif (str(excel_file).split('.')[-1] == "xlsx"):
             data = xlsx_get(excel_file, column_limit=2)['Sheet1']
         else:
-            raise Http404("this is not an excel file")
+            messages.error(request, "this is not an excel file")
+            return
         user = request.user
         return self.save_data(data, user)
         
@@ -151,20 +149,15 @@ class PostCreateView(LoginRequiredMixin, CreateView):
                     new_post.full_clean()
                 except ValidationError as e:
                         for message in e.messages:
-                            title_errors.append("row " + str(row_num) + ": " + message)
+                            messages.error(self.request, "row " + str(row_num) + ": " + message, extra_tags='invalid_data')
                         has_error = True
                 else:
-                    success_message.append(title + " is saved")
+                    messages.success(self.request, "row " + str(row_num) + ": " + title + " saved successfully")
                     new_post.save()
             else:
-                missing_errors.append("missing title/desc in row " + str(row_num))
-                has_error = True
+                messages.error(self.request, "row " + str(row_num) + ": " + "missing Title/Desc", extra_tags='invalid_data')
             row_num = row_num + 1
         
-        messages = {'general_error':missing_errors, 'title_error':title_errors,
-            'success':success_message, 'has_error':has_error}
-
-        return messages       
 
 class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Post
