@@ -35,6 +35,9 @@
                 <input id="button" type="submit" value="Create" name="single">
             </div>
         </form>
+        <button id="template-download">
+            <a href="/static/template.xlsx" download> Download Template </a>
+        </button>
         <form enctype="multipart/form-data" method="post">
             {% csrf_token %}
             {{ multi_upload.file }}

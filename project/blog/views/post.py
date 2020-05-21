@@ -137,9 +137,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         except MultiValueDictKeyError:
             raise MultiValueDictKeyError("MultiValueDictKeyError")
         if (str(excel_file).split('.')[-1] == "xls"):
-            data = xls_get(excel_file, column_limit=2)['Sheet1']
+            data = xls_get(excel_file, column_limit=2)['Post']
         elif (str(excel_file).split('.')[-1] == "xlsx"):
-            data = xlsx_get(excel_file, column_limit=2)['Sheet1']
+            data = xlsx_get(excel_file, column_limit=2)['Post']
         else:
             messages.error(request, "this is not an excel file")
             return
