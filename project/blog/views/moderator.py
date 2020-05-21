@@ -43,14 +43,14 @@ class ModeratorView(LoginRequiredMixin, ListView):
         context['form'] = ModeratorFilterForm()
         to_search_query = self.request.GET.get('to_search')
         if to_search_query == '1':
-            context = self.add_comment_context(context, filtered)
+            context = self.add_comment_context(context)
         else:
-            context = self.add_is_post_context(context, filtered)
+            context = self.add_post_context(context)
         return context
 
     ### helper functions
 
-    def add_comment_context(self, context, filtered):
+    def add_comment_context(self, context):
         """ Adds filtered comment instances to context"""
 
         comments = Comment.objects.all().order_by('-last_modified')
@@ -58,6 +58,7 @@ class ModeratorView(LoginRequiredMixin, ListView):
         context['is_comment'] = True
         context['is_post'] = False
         context['comments'] = filtered
+        return context
 
     def add_post_context(self, context):
         """ Adds filtered post instances to context"""
@@ -67,6 +68,7 @@ class ModeratorView(LoginRequiredMixin, ListView):
         context['posts'] = filtered
         context['is_comment'] = False
         context['is_post'] = True
+        return context
 
     def apply_query_fields(self, to_filter):
         """ Filters by the query fields specified in ModeratorForm """
