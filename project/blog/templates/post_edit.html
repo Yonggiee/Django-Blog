@@ -5,14 +5,12 @@
 {% block content %}
     <div class="post-form">
         <form method="post">
-            <div id="post-align">
-                {% csrf_token %}
-                <p>Title:</p>
-                {{ form.title }}
-                {{ form.title.errors }}
-                <p>Desc: </p>
-                {{ form.desc }}
-            </div>
+            {% csrf_token %}
+            <p id="post-align">Title:</p>
+            <div class="center">{{ form.title }}</div>
+            {{ form.title.errors }}
+            <p id="post-align">Desc: </p>
+            <div class="center">{{ form.desc }}</div>
             <div id="edit-form-buttons">
                 <input id="button" type="submit" name="update" value="Update">
                 <input id="button" type="submit" name="delete" value="Delete">

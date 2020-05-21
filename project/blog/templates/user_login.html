@@ -8,12 +8,8 @@
 <div class="login-user">
     <form method="post">
         {% csrf_token %}
-        <div id="login-user-fields">
-            <h3>Username:</h3>
-            {{ form.username }}
-            <h3>Password:</h3>
-            {{ form.password }}
-        </div>
+        <h3>Username: {{ form.username }}</h3>
+        <h3>Password: {{ form.password }}</h3>
         {% for error in form.non_field_errors %}
             <p>{{error}}</p>
         {% endfor %}

@@ -172,7 +172,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
                             messages.error(self.request, "row " + str(row_num) + ": " + message, extra_tags='invalid_data')
                         has_error = True
                 else:
-                    messages.success(self.request, "row " + str(row_num) + ": " + title + " saved successfully")
+                    messages.success(self.request, "row " + str(row_num) + ": '" + title + "' saved successfully")
                     new_post.save()
             else:
                 messages.error(self.request, "row " + str(row_num) + ": " + "missing Title/Desc", extra_tags='invalid_data')

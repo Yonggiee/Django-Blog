@@ -7,48 +7,49 @@
     {% if user.is_superuser %}
         <div class="moderator-filter">
             <form method="get">
-                <p>Author: {{ form.user }}</p>
-                <p>Title: {{ form.title }}</p>
-                <p> From </p>
-                <p>Day: {{ form.date_from_day }}</p>
-                <p>Month: {{ form.date_from_month }}</p>
-                <p>Year: {{ form.date_from_year }}</p>
-                <p> To </p>
-                <p>Day: {{ form.date_to_day }}</p>
-                <p>Month: {{ form.date_to_month }}</p>
-                <p>Year: {{ form.date_to_year }}</p>
+                <div class="center">
+                    <p>Author: {{ form.user }}</p>
+                    <p>Title: {{ form.title }}</p>
+                    <p> Date Range: </p>
+                    {{ form.date_from }}
+                    {{ form.date_to }}
+                </div>
                 <p>Is Deleted: {{ form.is_deleted }}</p>
                 <p>To Search: {{ form.to_search }}</p>
-                <input type="submit" value="Search" name="filter">
+                <div class="center">
+                    <input id="button" type="submit" value="Search" name="filter">
+                </div>
             </form>
         </div>
-
+        {% if is_post %}
         <div class="posts">
             <div id="post-header">
                 <p id="moderator-post-title-header">Title</p>
                 <p id="moderator-post-user-header">Author</p>
                 <p id="moderator-post-trash-header">Is_Deleted</p>
+                <p id="moderator-post-date-header">Last Modified</p>
             </div>
 
             <table CELLSPACING=0>
                 {% for post in posts %}
                 <tr class="post-table">
-                    <td id="moderator-post-title">{{ post.title }}</td>
-                    <td id="moderator-post-user">{{ post.user }}</td>
-                    <td id="moderator-post-trash">{{ post.is_trashed }}</td>
+                    <td id="moderator-post-title"><a href="{% url 'detailed' slug=post.slug %}">{{ post.title }}</a></td>
+                    <td id="moderator-post-user"><a href="{% url 'detailed' slug=post.slug %}">{{ post.user }}</a></td>
+                    <td id="moderator-post-trash"><a href="{% url 'detailed' slug=post.slug %}">{{ post.is_trashed }}</a></td>
+                    <td id="moderator-post-date"><a href="{% url 'detailed' slug=post.slug %}">{{ post.last_modified }}</a></td>
                     <td id="moderator-post-button">
-                        {% if post.is_trashed == True %}
+                        {% if post.is_trashed %}
                             <form method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="post_id" value="{{ post.id }}">
-                                <input id="button" type="submit" name="recover" value="Recover">
+                                <input id="button" type="submit" name="post-recover" value="Recover">
                                 </div>
                             </form>
                         {% else %}
                             <form method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="post_id" value="{{ post.id }}">
-                                <input id="button" type="submit" name="delete" value="Delete">
+                                <input id="button" type="submit" name="post-delete" value="Delete">
                                 </div>
                             </form>
                         {% endif %}
@@ -57,27 +58,46 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
 
-        <div class="posts">
-            <div id="post-header">
-                <p id="post-title-header">Title</p>
-                <p id="post-title-header">Comment</p>
-                <p id="post-user-header">Author</p>
-                <p id="post-date-header">Last Modified</p>
-                <p id="post-date-header">Is_Deleted</p>
+        {% if is_comment %}
+        <div class="moderator-comments">
+            <div id="comment-header">
+                <p id="moderator-comment-title-header">Title</p>
+                <p id="moderator-comment-desc-header">Comment</p>
+                <p id="moderator-comment-user-header">Commentor</p>
+                <p id="moderator-comment-trash-header">Is_Deleted</p>
             </div>
         
             <table CELLSPACING=0>
                 {% for comment in comments %}
-                <tr class="post-table">
-                    <td id="post-title">{{ comment.post.title }}</td>
-                    <td id="post-title">{{ comment.body }}</td>
-                    <td id="post-user">{{ comment.user }}</td>
-                    <td id="post-date">{{ comment.last_modified }}</td>
+                <tr id="comment-table">
+                    <td id="moderator-comment-title"><a href="{% url 'detailed' slug=comment.post.slug %}">{{ comment.post.title }}</a></td>
+                    <td id="moderator-comment-body"><a href="{% url 'detailed' slug=comment.post.slug %}">{{ comment.body }}</a></td>
+                    <td id="moderator-comment-user"><a href="{% url 'detailed' slug=comment.post.slug %}">{{ comment.user }}</a></td>
+                    <td id="moderator-comment-trash"><a href="{% url 'detailed' slug=comment.post.slug %}">{{ comment.is_trashed }}</a></td>
+                    <td id="moderator-comment-button">
+                        {% if comment.is_trashed %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <input id="button" type="submit" name="comment-recover" value="Recover">
+                            </div>
+                        </form>
+                        {% else %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <input id="button" type="submit" name="comment-delete" value="Delete">
+                            </div>
+                        </form>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
 
     {% else %}
         <h2> You are not a moderator </h2>

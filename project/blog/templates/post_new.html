@@ -5,6 +5,7 @@
 {% block content %}
     <div class="post-form">
         {% if messages %}
+        <div id="post-align">
             <h3>Success:</h3>
             <ul class="messages">
                 {% for message in messages %}
@@ -21,14 +22,17 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+            </div>
         {% endif %}
         <form method="post">
-            <div id="post-align">
-                {% csrf_token %}
-                <p>Title:</p>
+            {% csrf_token %}
+            <p id="post-align">Title:</p>
+            <div class="center">
                 {{ form.title }}
                 {{ form.title.errors }}
-                <p>Desc: </p>
+            </div>
+            <p id="post-align">Desc: </p>
+            <div class="center">
                 {{ form.desc }}
             </div>
             <div id="new-form-buttons">
@@ -38,11 +42,15 @@
         <button id="template-download">
             <a href="/static/template.xlsx" download> Download Template </a>
         </button>
-        <form enctype="multipart/form-data" method="post">
-            {% csrf_token %}
-            {{ multi_upload.file }}
-            <input id="button" type="submit" value="Multiple Upload" name="multiple">
-        </form>
+        <div id="multi-upload-outer">
+            <form enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                {{ multi_upload.file }}
+                <div id="multi-upload-inner">
+                    <input id="button" type="submit" value="Multiple Upload" name="multiple">
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}
 

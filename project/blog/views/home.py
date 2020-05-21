@@ -44,28 +44,16 @@ class HomeView(ListView):
 
         title_query = self.request.GET.get('title')
         user_query = self.request.GET.get('user')
-        date_from_day_query = self.request.GET.get('date_from_day')
-        date_from_month_query = self.request.GET.get('date_from_month')
-        date_from_year_query = self.request.GET.get('date_from_year')
-        date_to_day_query = self.request.GET.get('date_to_day')
-        date_to_month_query = self.request.GET.get('date_to_month')
-        date_to_year_query = self.request.GET.get('date_to_year')
+        date_from_query = self.request.GET.get('date_from')
+        date_to_query = self.request.GET.get('date_to')
 
         if title_query != '' and title_query is not None:
             posts = posts.filter(title__icontains=title_query)
         if user_query != '' and user_query is not None:
             posts = posts.filter(user__icontains=user_query)
-        if date_from_day_query != '' and date_from_day_query is not None:
-            posts = posts.filter(last_modified__day__gte=date_from_day_query)
-        if date_from_month_query != '' and date_from_month_query is not None:
-            posts = posts.filter(last_modified__month__gte=date_from_month_query)
-        if date_from_year_query != '' and date_from_year_query is not None:
-            posts = posts.filter(last_modified__year__gte=date_from_year_query)
-        if date_to_day_query != '' and date_to_day_query is not None:
-            posts = posts.filter(last_modified__day__lte=date_to_day_query)
-        if date_to_month_query != '' and date_to_month_query is not None:
-            posts = posts.filter(last_modified__month__lte=date_to_month_query)
-        if date_to_year_query != '' and date_to_year_query is not None:
-            posts = posts.filter(last_modified__year__lte=date_to_year_query)
+        if date_from_query != '' and date_from_query is not None:
+            posts = posts.filter(last_modified__date__gte=date_from_query)
+        if date_to_query != '' and date_to_query is not None:
+            posts = posts.filter(last_modified__date__lte=date_to_query)
         
         return posts

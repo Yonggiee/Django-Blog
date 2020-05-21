@@ -5,24 +5,15 @@
 {% block content %}
 <div class="home-filter">
     <form method="get">
-        <div class="filter-parts">
-            <div class="filter-part-1">
-                <p id="title-filter">Title:{{ filter_form.title }}</p>
-                <p id="user-filter">Author:{{ filter_form.user }}</p>
-            </div>
-            <div class="filter-part-2">
-                <p>From</p>
-                <p id="user-filter">Day:{{ filter_form.date_from_day }}</p>
-                <p>{{ filter_form.date_from_day.errors }} </p>
-                <p id="user-filter">Month:{{ filter_form.date_from_month }}</p>
-                <p id="user-filter">Year:{{ filter_form.date_from_year }}</p>
-            </div>
-            <div class="filter-part-3">
-                <p>To</p>
-                <p id="user-filter">Day:{{ filter_form.date_to_day }}</p>
-                <p id="user-filter">Month:{{ filter_form.date_to_month }}</p>
-                <p id="user-filter">Year:{{ filter_form.date_to_year }}</p>
-            </div>
+        <div class="filter-part-one">
+            <p>Title:{{ filter_form.title }}</p>
+            <p >Author:{{ filter_form.user }}</p>
+            <div class="clearfix"></div>
+        </div>
+        <div class="filter-part-two">
+            <p> Date Range: </p>
+            {{ filter_form.date_from }}
+            {{ filter_form.date_to }}
         </div>
         <div id="buttons">
             <input id="button" type="submit" value="Search" name="filter">
@@ -32,14 +23,17 @@
 
 <div class="post-with-button">
     <h2 id="post-heading">Posts</h2>
-    <a href="{% url 'post_new' %}">
-        {% if user.is_authenticated %}
-        <button id="new-post-button">New Post</button>
-        {% else %}
-        <button id="new-post-button">Login to post</button>
-        {% endif %}
-    </a>
+    <div id="flush-new-post-button">
+        <a href="{% url 'post_new' %}">
+            {% if user.is_authenticated %}
+            <button id="new-post-button">New Post</button>
+            {% else %}
+            <button id="new-post-button">Login to post</button>
+            {% endif %}
+        </a>
+    </div>
 </div>
+<div class="clearfix"></div>
 
 <div class="posts">
     <div id="post-header">
