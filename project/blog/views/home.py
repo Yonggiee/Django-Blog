@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView
 

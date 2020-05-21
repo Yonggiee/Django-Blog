@@ -11,4 +11,4 @@ def handle_login(request):
     if form.is_valid():
         login(request, form.get_user())
     else:
-        messages.error(request, "Please check you entered the correct username and password")
+        messages.error(request, "Please check you entered the correct username and password", extra_tags='base')

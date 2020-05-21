@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView
 
@@ -7,7 +8,7 @@ from forms.moderator import ModeratorFilterForm
 from post.models import Post
 from .commons import add_login_context
 
-class ModeratorView(ListView):
+class ModeratorView(LoginRequiredMixin, ListView):
     template_name = 'moderator.html'
     model = Post
 

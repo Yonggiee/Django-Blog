@@ -9,7 +9,7 @@
             <div id="detail-left-left">
                 <div id="detail-left-left-top">
                     <a href="{% url 'post_edit' slug=post.slug %}">
-                        {% if is_post_user or is_superuser %}
+                        {% if is_post_user or user.is_superuser %}
                         <button id="button">Edit Post</button>
                         {% elif not user.is_authenticated %}
                         <button id="button">Login to edit</button>
@@ -42,7 +42,7 @@
             <div class="comments">
                 {% for comment in comments %}
                 <div class="comment">
-                    <p>{{ comment.body }}</p>
+                    <p id="detailed-comment-body">{{ comment.body }}</p>
                     <p id="detailed-comment-user">By:{{ comment.user }}</p>
                 </div>
                 {% endfor %}

@@ -54,6 +54,11 @@ class PostDetailedView(DetailView):
                 context = self.get_current_context(request)
                 return render(request, self.template_name, context)
         return HttpResponseRedirect(request.path_info) 
+    
+    def get(self, request, **kwargs):
+        if 'moderator' in request.GET:
+            return HttpResponseRedirect(reverse('moderator'))
+        return super(PostDetailedView, self).get(request)
 
     #### helper functions
 

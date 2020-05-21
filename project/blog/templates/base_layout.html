@@ -41,13 +41,17 @@
     </div>
 
     {% if messages %}
-        <div id="base-messages">
-            <ul>
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </ul>  
-        </div>
+        {% if 'base' in messages %}
+            <div id="base-messages">
+                <ul>
+                    {% for message in messages %}
+                        {% if 'base' in message %}
+                            {{ message }}
+                        {% endif %}
+                    {% endfor %}
+                </ul>  
+            </div>
+        {% endif %}
     {% endif %}
 
     {% block content %}

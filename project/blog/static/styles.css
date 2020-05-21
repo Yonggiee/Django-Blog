@@ -261,6 +261,11 @@ td{
     margin-right: 70px;
 }
 
+#detailed-comment-body{
+    margin-left: 5%;
+    font-size: small;
+}
+
 #detailed-comment-user{
     margin-left: 80%;
     font-size: small;
