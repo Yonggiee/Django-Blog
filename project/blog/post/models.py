@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from .validators import validate_symbol
 
-# Create your models here.
 class Post(models.Model):
     user = models.CharField(max_length=255)
     title = models.CharField(max_length=200, unique=True,

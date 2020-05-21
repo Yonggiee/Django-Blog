@@ -40,6 +40,8 @@ class HomeView(ListView):
     # helper functions
 
     def apply_query_fields(self, posts):
+        """ Filters the post by the query fields specified in FilterForm """
+
         title_query = self.request.GET.get('title')
         user_query = self.request.GET.get('user')
         date_from_day_query = self.request.GET.get('date_from_day')

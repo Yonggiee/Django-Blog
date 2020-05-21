@@ -1,6 +1,12 @@
 from django import forms
 
 class ModeratorFilterForm(forms.Form):
+    """
+    A form class that is used in ModeratorView for moderators to
+    filter the information displayed in the table.
+    Users can toggle between comments and posts
+    """
+
     SEARCH_OPTIONS = [
         ("0", "Posts"),
         ("1", "Comments"),

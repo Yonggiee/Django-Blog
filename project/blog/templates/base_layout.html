@@ -41,17 +41,13 @@
     </div>
 
     {% if messages %}
-        {% if 'base' in messages %}
+        {% for message in messages %}
+            {% if "base" in message.tags %}
             <div id="base-messages">
-                <ul>
-                    {% for message in messages %}
-                        {% if 'base' in message %}
-                            {{ message }}
-                        {% endif %}
-                    {% endfor %}
-                </ul>  
+                <ul>{{ message }}</ul>  
             </div>
-        {% endif %}
+            {% endif %}
+        {% endfor %}
     {% endif %}
 
     {% block content %}

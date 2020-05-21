@@ -16,4 +16,6 @@ class PostForm(ModelForm):
         self.fields['desc'].widget.attrs['rows']=35
 
 class MultipleUploadForm(forms.Form):
+    """ A form class for users to upload multiple posts at once """
+
     file = forms.FileField()

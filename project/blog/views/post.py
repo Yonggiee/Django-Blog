@@ -63,12 +63,19 @@ class PostDetailedView(DetailView):
     #### helper functions
 
     def save_comment(self, request, form):
+        """ Saves the comment in CommentForm into database """
+
         comment = form.save(commit=False)
         comment.user = request.user.username
         comment.post_id = self.get_object().id
         comment.save()
 
     def get_current_context(self, request):
+        """ 
+        Returns the current context of view. 
+        The context includes the errors from CommentForm.
+        """
+
         form = CommentForm(request.POST)
         current_user = request.user.username
         slug = self.kwargs['slug']
@@ -98,7 +105,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        """If the form is invalid, render the invalid form."""
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
@@ -121,6 +127,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     ## helper functions
 
     def handle_input_file(self, request):
+        """ 
+        Saves the information provided by the excel file into database.
+        Adds error if the file is not an excel file
+        """
+
         try:
             excel_file = request.FILES['file']
         except MultiValueDictKeyError:
@@ -136,6 +147,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return self.save_data(data, user)
         
     def save_data(self, data, user):
+        """
+        Creates and saves Post instance after validation.
+        Adds success and error messages for each row in the excel file.
+        """
+
         row_num = 1
         missing_errors = []
         title_errors = []
@@ -199,6 +215,8 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return self.post_instance.get_absolute_url()
 
     def test_func(self):
+        """ Tests if the user is a superuser or the author of the post """
+
         current_user = self.request.user.username
         slug = self.kwargs['slug']
         post_user = Post.objects.get(slug=slug).user

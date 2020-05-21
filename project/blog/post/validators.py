@@ -2,6 +2,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 def validate_symbol(string):
+    """
+    Raises a ValidationError if the string contains mroe than 50 symbols
+    """
+
     special = 0
     for i in range(len(string)):
         if(string[i].isalpha()):
