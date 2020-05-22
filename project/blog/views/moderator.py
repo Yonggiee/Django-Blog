@@ -1,15 +1,17 @@
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView
+from enum import Enum
 
 from comment.models import Comment
 from forms.moderator import ModeratorFilterForm
 from post.models import Post
 from .commons import add_login_context
 
-class ModeratorView(LoginRequiredMixin, ListView):
+class ModeratorView(UserPassesTestMixin, LoginRequiredMixin, ListView):
     template_name = 'moderator.html'
     model = Post
 
@@ -48,13 +50,20 @@ class ModeratorView(LoginRequiredMixin, ListView):
             context = self.add_post_context(context)
         return context
 
+    def test_func(self):
+        """ Tests if the user is a superuser/moderator """
+        
+        if not self.request.user.is_superuser :
+            raise PermissionDenied("You are not a moderator")
+        return True
+
     ### helper functions
 
     def add_comment_context(self, context):
         """ Adds filtered comment instances to context"""
 
         comments = Comment.objects.all().order_by('-last_modified')
-        filtered = self.apply_query_fields(comments)
+        filtered = self.apply_query_fields(comments, QueryType.Comment)
         context['is_comment'] = True
         context['is_post'] = False
         context['comments'] = filtered
@@ -64,23 +73,20 @@ class ModeratorView(LoginRequiredMixin, ListView):
         """ Adds filtered post instances to context"""
 
         posts = Post.objects.all().order_by('-last_modified')
-        filtered = self.apply_query_fields(posts)
+        filtered = self.apply_query_fields(posts, QueryType.Post)
         context['posts'] = filtered
         context['is_comment'] = False
         context['is_post'] = True
         return context
 
-    def apply_query_fields(self, to_filter):
+    def apply_query_fields(self, to_filter, query_type):
         """ Filters by the query fields specified in ModeratorForm """
 
-        title_query = self.request.GET.get('title')
         user_query = self.request.GET.get('user')
         date_from_query = self.request.GET.get('date_from')
         date_to_query = self.request.GET.get('date_to')
         is_deleted_query = self.request.GET.get('is_deleted')
 
-        if title_query != '' and title_query is not None:
-            to_filter = to_filter.filter(title__icontains=title_query)
         if user_query != '' and user_query is not None:
             to_filter = to_filter.filter(user__icontains=user_query)
         if date_from_query != '' and date_from_query is not None:
@@ -92,6 +98,17 @@ class ModeratorView(LoginRequiredMixin, ListView):
         else:
             to_filter = to_filter.filter(is_trashed=False)
 
+        title_query = self.request.GET.get('title')
+        if title_query != '' and title_query is not None:
+            if query_type == QueryType.Post:
+                to_filter = to_filter.filter(title__icontains=title_query)
+            else:
+                to_filter = to_filter.filter(post__title__icontains=title_query)
+
         return to_filter
 
         
+
+class QueryType(Enum):
+    Post = 1
+    Comment = 2

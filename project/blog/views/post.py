@@ -1,8 +1,7 @@
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.exceptions import ValidationError
-from django.http import Http404
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -12,9 +11,9 @@ from django.views.generic.edit import CreateView, UpdateView
 from pyexcel_xls import get_data as xls_get
 from pyexcel_xlsx import get_data as xlsx_get
 
+from comment.models import Comment
 from forms.comment import CommentForm
 from forms.post import PostForm, MultipleUploadForm
-from comment.models import Comment
 from post.models import Post
 from .commons import add_login_context, handle_login
 
@@ -224,4 +223,4 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             return True
         else:
             if self.request.user.is_authenticated:
-                raise Http404("You are not the user of this post")
+                raise PermissionDenied("You are not the author of this post")

@@ -86,6 +86,16 @@ body{
 .small-margin-bottom{
     margin-bottom: 20px;
 }
+.small-margin-left{
+    margin-left:30px;
+}
+.small-margin-top{
+    margin-top:20px;
+}
+.red{
+    color:red;
+}
+
 
 /* Home */
 .home-filter{
@@ -369,7 +379,7 @@ td{
 /* signup view */
 
 .signup{
-    height: 450px;
+    overflow: auto;
     margin-top: 10%;
     margin-left: 30%;
     width: 40%;
