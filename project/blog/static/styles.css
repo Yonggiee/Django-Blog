@@ -130,8 +130,8 @@ body{
 }
 
 .posts{
-    margin-left: 5%;
-    width: 90%;
+    margin-left: 10%;
+    width: 80%;
     background-position: center center;
     background-color: white;
     padding:0;
@@ -150,14 +150,13 @@ body{
 }
 
 .post-with-button{
-    margin-left: 5%;
-    width: 95%;
+    margin-left: 10%;
 }
 
 #flush-new-post-button{
     margin-top: 20px;
     float:right;
-    margin-right: 5%;
+    margin-right: 10%;
 }
 
 #new-post-button{
@@ -238,7 +237,9 @@ td{
     border-color: rgb(206, 206, 206);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: white;
-    height: 550px;
+    min-height: 550px;
+    overflow: auto;
+    margin-bottom: 40px;
 }
 
 .detailed-right{
@@ -286,13 +287,16 @@ td{
 }
 
 #detailed-comment-body{
+    padding-top: 5px;
     margin-left: 5%;
+    margin-right: 5%;
     font-size: small;
 }
 
 #detailed-comment-user{
     margin-left: 80%;
     font-size: small;
+    padding-bottom: 10px;
 }
 .comment{
     background-color: white;
