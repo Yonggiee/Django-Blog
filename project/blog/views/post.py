@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
@@ -30,7 +30,7 @@ class PostDetailedView(DetailView):
 
         current_user = self.request.user.username
         slug = self.kwargs['slug']
-        post_user = Post.objects.get(slug=slug).user
+        post_user = get_object_or_404(Post, slug=slug).user
         context['is_post_user'] = current_user == post_user
         self.past_context = context
         return context
@@ -78,7 +78,7 @@ class PostDetailedView(DetailView):
         form = CommentForm(request.POST)
         current_user = request.user.username
         slug = self.kwargs['slug']
-        post_user = Post.objects.get(slug=slug).user
+        post_user = get_object_or_404(Post, slug=slug).user
         is_post_user = current_user == post_user
         comments = Comment.objects.filter(post=self.get_object().id).order_by('-last_modified')
 
@@ -218,7 +218,7 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         current_user = self.request.user.username
         slug = self.kwargs['slug']
-        post_user = Post.objects.get(slug=slug).user
+        post_user = get_object_or_404(Post, slug=slug).user
         if current_user == post_user or self.request.user.is_superuser:
             return True
         else:

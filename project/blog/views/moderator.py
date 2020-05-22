@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView
 from enum import Enum
@@ -22,19 +23,19 @@ class ModeratorView(UserPassesTestMixin, LoginRequiredMixin, ListView):
         else:
             object_id = request.POST.get('id')
             if 'post-delete' in request.POST:
-                post = Post.objects.get(id=object_id)
+                post = get_object_or_404(Post, id=object_id)
                 post.is_trashed = True
                 post.save()
             elif 'post-recover' in request.POST:
-                post = Post.objects.get(id=object_id)
+                post = get_object_or_404(Post, id=object_id)
                 post.is_trashed = False
                 post.save()
             elif 'comment-delete' in request.POST:
-                comment = Comment.objects.get(id=object_id)
+                comment = get_object_or_404(Comment, id=object_id)
                 comment.is_trashed = True
                 comment.save()
             elif 'comment-recover' in request.POST:
-                comment = Comment.objects.get(id=object_id)
+                comment = et_object_or_404(Comment, id=object_id)
                 comment.is_trashed = False
                 comment.save()
         return HttpResponseRedirect(request.path_info)
