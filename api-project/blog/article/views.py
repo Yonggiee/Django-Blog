@@ -1,22 +1,22 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Post
-from .serializers import PostSerializer
+from .models import Article
+from .serializers import ArticleSerializer
 
 
 @api_view(['GET', 'POST'])
-def post_list(request, format=None):
+def article_list(request, format=None):
     """
-    List all code posts, or create a new Post.
+    List all code posts, or create a new article.
     """
     if request.method == 'GET':
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
+        articles = Article.objects.all()
+        serializer = ArticleSerializer(articles, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = PostSerializer(data=request.data)
+        serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -24,26 +24,26 @@ def post_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def post_detail(request, pk, format=None):
+def article_detail(request, pk, format=None):
     """
-    Retrieve, update or delete a code post.
+    Retrieve, update or delete a code article.
     """
     try:
-        post = Post.objects.get(pk=pk)
-    except Post.DoesNotExist:
+        article = Article.objects.get(pk=pk)
+    except Article.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PostSerializer(post)
+        serializer = ArticleSerializer(article)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = PostSerializer(post, data=request.data)
+        serializer = ArticleSerializer(article, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        post.delete()
+        article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .validators import validate_symbol
 
-class Post(models.Model):
+class Article(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
     title = models.CharField(max_length=200, unique=True,
         validators=[validate_symbol]
