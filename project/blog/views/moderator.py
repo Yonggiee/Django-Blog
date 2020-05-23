@@ -35,7 +35,7 @@ class ModeratorView(UserPassesTestMixin, LoginRequiredMixin, ListView):
                 comment.is_trashed = True
                 comment.save()
             elif 'comment-recover' in request.POST:
-                comment = et_object_or_404(Comment, id=object_id)
+                comment = get_object_or_404(Comment, id=object_id)
                 comment.is_trashed = False
                 comment.save()
         return HttpResponseRedirect(request.path_info)

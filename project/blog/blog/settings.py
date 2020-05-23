@@ -77,21 +77,13 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME': 'Users',
+        'NAME': 'Blog',
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
         'PASSWORD': 'nu$password27',
         'HOST': 'localhost',
         'PORT': '5433'
     },
-    'PostsAndComments': {
-        'NAME': 'Blog_PostsAndComments',
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'postgres',
-        'PASSWORD': 'nu$password27',
-        'HOST': 'localhost',
-        'PORT': '5433'
-    }
 }
 
 # Password validation
@@ -135,5 +127,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
-
-DATABASE_ROUTERS = ["routers.routers.PostsAndCommentsRouter"]

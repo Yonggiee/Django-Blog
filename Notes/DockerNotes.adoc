@@ -39,3 +39,12 @@ image::./images/DockerCheatsheet.PNG[640,640]
 . docker run -p localhostport:dockerport
 - docker persistant data
 . docker run -v localdir:dockerdir
+
+
+dockerised
+database
+api
+seed data
+authentication layer to secure the endpoint (security)
+
+frontend
