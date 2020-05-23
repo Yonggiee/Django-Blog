@@ -95,3 +95,13 @@ Permissions
 - token authentication, user receives temporary token to be inserted in the headers
 of HTTP request
 . `from rest_framework.authentication import TokenAuthentication`
+
+Common database Naming conventions
+- /?getparamname=value
+- user
+- title
+- date_from
+- date_to
+- are empty parameters, they shouldn't be there without any value as it just pollutes
+- created_at
+- updated_at
