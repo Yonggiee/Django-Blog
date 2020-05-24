@@ -19,6 +19,18 @@ class ArticleList(mixins.ListModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+    def put(self, request, *args, **kwargs):
+        articles_list = request.data
+        for article in articles_list:
+            pk = article['id']
+            title = article['title']
+            desc = article['desc']
+            article_to_change = Article.objects.get(pk=pk)
+            article_to_change.title = title
+            article_to_change.desc = desc
+            article_to_change.save()
+        return self.get(request, *args, **kwargs)
+
 class ArticleDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -44,4 +56,4 @@ class CommentList(generics.GenericAPIView):
         comments = CommentSerializer(self.get_object().comments, many=True)
         comments_json = comments.data
         return Response(comments_json)
-        
+

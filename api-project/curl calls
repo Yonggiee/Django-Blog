@@ -1,3 +1,6 @@
 curl -X POST http://127.0.0.1:8000/articles/ -d "user=1&title=this is title&desc=this is the desc"
+curl -X PUT --data '{"user":1, "title":"wee", "desc":"zoo"}' --header "Content-Type:application/json" http://127.0.0.1:8000/articles/2/
 
 curl http://127.0.0.1:8000/articles/
+
+curl -X PUT http://127.0.0.1:8000/articles/ -d "user=1&title=this is new title&desc=this is new desc"

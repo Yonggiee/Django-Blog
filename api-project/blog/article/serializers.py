@@ -9,7 +9,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'desc', 'user', 'date_created',
             'last_modified', 'is_trashed',)
 
-
 class ArticleCommentSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True)
 
