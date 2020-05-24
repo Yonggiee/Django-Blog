@@ -5,8 +5,10 @@ from .validators import validate_one_alphanum
 
 # Create your models here.
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, related_name='comments')
     body = models.TextField(validators=[MinLengthValidator(32), validate_one_alphanum])
-    article = models.ForeignKey('article.Article', on_delete=models.CASCADE,)
+    article = models.ForeignKey('article.Article', on_delete=models.CASCADE,
+        related_name='comments')
     last_modified = models.DateTimeField(auto_now=True)
     is_trashed = models.BooleanField(default=False)

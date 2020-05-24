@@ -1,49 +1,43 @@
+from rest_framework import generics
+from rest_framework import mixins
 from rest_framework import status
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Article
-from .serializers import ArticleSerializer
+from .serializers import ArticleSerializer, ArticleCommentSerializer
 
 
-@api_view(['GET', 'POST'])
-def article_list(request, format=None):
-    """
-    List all code posts, or create a new article.
-    """
-    if request.method == 'GET':
-        articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data)
+class ArticleList(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-    elif request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def article_detail(request, pk, format=None):
-    """
-    Retrieve, update or delete a code article.
-    """
-    try:
-        article = Article.objects.get(pk=pk)
-    except Article.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class ArticleDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-    if request.method == 'GET':
-        serializer = ArticleSerializer(article)
-        return Response(serializer.data)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
-    elif request.method == 'PUT':
-        serializer = ArticleSerializer(article, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-    elif request.method == 'DELETE':
-        article.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+class CommentList(mixins.RetrieveModelMixin,
+                  generics.GenericAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleCommentSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
