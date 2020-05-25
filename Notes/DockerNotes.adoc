@@ -48,3 +48,6 @@ seed data
 authentication layer to secure the endpoint (security)
 
 frontend
+
+Naming 
+docker-compose -p THISISMYPROJECT_AND_NWK_NAME up -d

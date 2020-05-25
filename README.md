@@ -24,3 +24,4 @@ Docker
 - https://docs.docker.com/get-started/
 - https://docs.docker.com/get-started/part2/
 - https://docs.docker.com/compose/django/
+- https://www.youtube.com/watch?v=Y_rh-VeC_j4
