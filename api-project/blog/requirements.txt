@@ -1,0 +1,14 @@
+asgiref==3.2.7
+autopep8==1.4.4
+certifi==2020.4.5.1
+Django==3.0.3
+django-autoslug==1.9.7
+djangorestframework==3.11.0
+et-xmlfile==1.0.1
+jdcal==1.4.1
+lml==0.0.9
+openpyxl==3.0.3
+psycopg2==2.8.5
+pycodestyle==2.5.0
+pytz==2020.1
+sqlparse==0.3.1
