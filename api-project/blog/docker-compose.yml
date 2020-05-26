@@ -2,11 +2,14 @@ version: '3'
 
 services:
   db:
+    restart: always
     image: postgres
     environment:
+      POSTGRES_USER: tester
       POSTGRES_PASSWORD: password1
-      POSTGRES_DB: postgres
+      POSTGRES_DB: blog-api
   web:
+    restart: always
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
