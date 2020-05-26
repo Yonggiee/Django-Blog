@@ -8,3 +8,5 @@ curl -X PUT --data '[{"user":1, "title":"odlodldoldold", "desc":"oldoldold","id"
 curl http://127.0.0.1:8000/articles/
 
 curl -X PUT http://127.0.0.1:8000/articles/ -d "user=1&title=this is new title&desc=this is new desc"
+
+curl -H 'Accept: application/json' -H "Authorization: Bearer token" http://127.0.0.1:8000/articles/

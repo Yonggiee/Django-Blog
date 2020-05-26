@@ -25,3 +25,8 @@ Docker
 - https://docs.docker.com/get-started/part2/
 - https://docs.docker.com/compose/django/
 - https://www.youtube.com/watch?v=Y_rh-VeC_j4
+- https://hub.docker.com/_/postgres
+
+JWT
+- https://jwt.io/introduction/
+- https://simpleisbetterthancomplex.com/tutorial/2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html
