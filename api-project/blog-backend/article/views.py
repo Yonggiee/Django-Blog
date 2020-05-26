@@ -13,7 +13,7 @@ class ArticleList(mixins.ListModelMixin,
                   generics.GenericAPIView):
     queryset = Article.objects.all().order_by('-last_modified')
     serializer_class = ArticleSerializer
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -39,7 +39,7 @@ class ArticleDetail(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     queryset = Article.objects.all()        ### why is queryset all when it is one object?
     serializer_class = ArticleSerializer
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -54,7 +54,7 @@ class ArticleDetail(mixins.RetrieveModelMixin,
 class CommentList(generics.GenericAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleCommentSerializer
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         comments = CommentSerializer(self.get_object().comments, many=True)
