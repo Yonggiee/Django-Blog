@@ -9,25 +9,25 @@ import { ArticleService } from 'src/app/services/article.service';
 })
 export class ArticleDetailComponent implements OnInit {
 
-  id;
+  slug;
   article;
 
   constructor(private route: ActivatedRoute, 
     private articleService: ArticleService) { }
 
   ngOnInit(): void {
-    this.getIdFromParams();
+    this.getSlugFromParams();
     this.getDetailedArticle();
   }
 
-  getIdFromParams() {
+  getSlugFromParams() {
     this.route.paramMap.subscribe(params => {
-      this.id = params.get('id')
+      this.slug = params.get('slug')
     })
   }
 
   getDetailedArticle() {
-    this.articleService.getDetailedArticle(this.id).subscribe(
+    this.articleService.getDetailedArticle(this.slug).subscribe(
       article => {
         this.article = article;
       }

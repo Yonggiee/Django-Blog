@@ -39,6 +39,7 @@ class ArticleDetail(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     queryset = Article.objects.all()        ### why is queryset all when it is one object?
     serializer_class = ArticleSerializer
+    lookup_field = 'slug'
     #permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):

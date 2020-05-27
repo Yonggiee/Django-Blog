@@ -5,9 +5,9 @@ from .views import ArticleList, ArticleDetail, CommentList
 
 urlpatterns = [
     url(r'^articles/$', ArticleList.as_view(), name='article-list'),
-    url(r'^articles/(?P<pk>[0-9]+)/$',
+    url(r'^article/(?P<slug>[\w-]+)/$',
         ArticleDetail.as_view(), name='article-details'),
-    url(r'^articles/(?P<pk>[0-9]+)/comments/$',
+    url(r'^article/(?P<slug>[\w-]+)/comments/$',
         CommentList.as_view(), name='article-comments'),
 ]
 
