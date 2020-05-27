@@ -1,8 +1,9 @@
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import status
+from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, SAFE_METHODS
 from .models import Article
 from .serializers import ArticleSerializer, ArticleCommentSerializer
 from comment.serializers import CommentSerializer
@@ -13,13 +14,20 @@ class ArticleList(mixins.ListModelMixin,
                   generics.GenericAPIView):
     queryset = Article.objects.all().order_by('-last_modified')
     serializer_class = ArticleSerializer
-    #permission_classes = (IsAuthenticated,)
+    
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return (AllowAny(),)
+        return (IsAuthenticated(),)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-
+    
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
     def put(self, request, *args, **kwargs):
         articles_list = request.data
@@ -33,6 +41,9 @@ class ArticleList(mixins.ListModelMixin,
             article_to_change.save()
         return self.get(request, *args, **kwargs)
 
+    def get_serializer_context(self):
+        return {"user": self.request.user.id}
+
 class ArticleDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -40,11 +51,15 @@ class ArticleDetail(mixins.RetrieveModelMixin,
     queryset = Article.objects.all()        ### why is queryset all when it is one object?
     serializer_class = ArticleSerializer
     lookup_field = 'slug'
-    #permission_classes = (IsAuthenticated,)
+
+    # def get_permissions(self):
+    #     if self.request.method in SAFE_METHODS:
+    #         return (AllowAny(),)
+    #     return (IsAuthenticated(),)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-
+        
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
