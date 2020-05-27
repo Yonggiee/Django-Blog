@@ -19,4 +19,8 @@ export class ArticleService {
   getDetailedArticle(slug): Observable<any> {
     return this.http.get(this.baseurl + '/article/' + slug, { headers: this.httpHeaders });
   }
+
+  getArticleComments(slug): Observable<any> {
+    return this.http.get(this.baseurl + '/article/' + slug + '/comments/', { headers: this.httpHeaders });
+  }
 }

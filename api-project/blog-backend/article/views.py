@@ -55,6 +55,7 @@ class ArticleDetail(mixins.RetrieveModelMixin,
 class CommentList(generics.GenericAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleCommentSerializer
+    lookup_field = 'slug'
     #permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):

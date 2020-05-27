@@ -1,3 +1,10 @@
 <h2> {{article?.title}} </h2>
 <p> {{article?.last_modified}}</p>
 <p> {{article?.desc}} </p>
+
+<h3> Comments </h3>
+<ul>
+    <li *ngFor="let comment of comments">
+        <p>{{ comment.body }}</p>
+    </li>
+</ul>

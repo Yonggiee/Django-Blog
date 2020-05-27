@@ -11,6 +11,7 @@ export class ArticleDetailComponent implements OnInit {
 
   slug;
   article;
+  comments;
 
   constructor(private route: ActivatedRoute, 
     private articleService: ArticleService) { }
@@ -18,6 +19,7 @@ export class ArticleDetailComponent implements OnInit {
   ngOnInit(): void {
     this.getSlugFromParams();
     this.getDetailedArticle();
+    this.getComments();
   }
 
   getSlugFromParams() {
@@ -33,4 +35,13 @@ export class ArticleDetailComponent implements OnInit {
       }
     )
   }
+
+  getComments() {
+    this.articleService.getArticleComments(this.slug).subscribe(
+      comments => {
+        this.comments = comments;
+      }
+    )
+  }
+
 }
