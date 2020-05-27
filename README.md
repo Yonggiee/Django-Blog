@@ -30,3 +30,6 @@ Docker
 JWT
 - https://jwt.io/introduction/
 - https://simpleisbetterthancomplex.com/tutorial/2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html
+
+Angular
+- https://www.youtube.com/watch?v=tUCa3JcFILI

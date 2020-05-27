@@ -15,4 +15,8 @@ export class ArticleService {
   getAllArticles(): Observable<any>{
     return this.http.get(this.baseurl + '/articles/', {headers: this.httpHeaders});
   }
+
+  getDetailedArticle(id): Observable<any> {
+    return this.http.get(this.baseurl + '/articles/' + id, { headers: this.httpHeaders });
+  }
 }
