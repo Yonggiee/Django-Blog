@@ -7,6 +7,7 @@ import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { ArticleNewComponent } from './components/article-new/article-new.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, routingComponents, ArticleNewComponent],
@@ -15,7 +16,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     HttpClientModule,
     AppRoutingModule,
     NoopAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

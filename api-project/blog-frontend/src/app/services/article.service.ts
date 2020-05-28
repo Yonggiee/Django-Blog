@@ -23,4 +23,9 @@ export class ArticleService {
   getArticleComments(slug): Observable<any> {
     return this.http.get(this.baseurl + '/article/' + slug + '/comments/', { headers: this.httpHeaders });
   }
+
+  postArticle(article): Observable<any> {
+    const body = article
+    return this.http.post(this.baseurl + '/articles/', body, { headers: this.httpHeaders });
+  }
 }

@@ -1,1 +1,15 @@
-<p>article-new works!</p>
+<form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+    <p>
+        <label>Title:</label>
+        <input type="text" formControlName="title">
+    </p>
+    <p>
+        <label>Description </label>
+        <input type="text" formControlName="desc">
+    </p>
+    <p>
+        <label>User </label>
+        <input type="number" formControlName="user">
+    </p>
+    <button type="submit" [disabled]="!articleForm.valid">Submit</button>
+</form>
