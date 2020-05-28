@@ -35,3 +35,4 @@ Angular
 - Routing and Navigation in Angular https://www.youtube.com/watch?v=tUCa3JcFILI
 - Login and Auth User with Angular https://www.youtube.com/watch?v=hBq9ES-oUNY
 - popup dialogs https://www.youtube.com/watch?v=ZL0d3M3uoRQ
+- Building forms in Angular https://www.youtube.com/watch?v=hAaoPOx_oIw 
