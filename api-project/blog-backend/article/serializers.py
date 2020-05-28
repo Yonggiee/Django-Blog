@@ -5,6 +5,12 @@ from comment.serializers import CommentSerializer
 from .models import Article
 
 class ArticleSerializer(serializers.ModelSerializer):
+    last_modified = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, obj):
+      return obj.user.username
+
     class Meta:
         model = Article
         fields = ('id', 'title', 'desc', 'user', 'date_created',

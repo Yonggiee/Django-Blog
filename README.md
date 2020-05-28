@@ -16,6 +16,7 @@ Django
 - https://simpleisbetterthancomplex.com/article/2017/03/21/class-based-views-vs-function-based-views.html
 - http://www.tomchristie.comrest-framework-2-docs
 - https://www.django-rest-framework.org/tutorial/quickstart/
+- Username and not ID https://stackoverflow.com/questions/14896825/django-showing-username-and-not-id-how
 
 Docker
 
