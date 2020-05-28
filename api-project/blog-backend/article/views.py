@@ -15,10 +15,10 @@ class ArticleList(mixins.ListModelMixin,
     queryset = Article.objects.all().order_by('-last_modified')
     serializer_class = ArticleSerializer
     
-    # def get_permissions(self):
-    #     if self.request.method in SAFE_METHODS:
-    #         return (AllowAny(),)
-    #     return (IsAuthenticated(),)
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return (AllowAny(),)
+        return (IsAuthenticated(),)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -26,8 +26,8 @@ class ArticleList(mixins.ListModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
     
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
     def put(self, request, *args, **kwargs):
         articles_list = request.data
@@ -52,10 +52,10 @@ class ArticleDetail(mixins.RetrieveModelMixin,
     serializer_class = ArticleSerializer
     lookup_field = 'slug'
 
-    # def get_permissions(self):
-    #     if self.request.method in SAFE_METHODS:
-    #         return (AllowAny(),)
-    #     return (IsAuthenticated(),)
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return (AllowAny(),)
+        return (IsAuthenticated(),)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -71,7 +71,6 @@ class CommentList(generics.GenericAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleCommentSerializer
     lookup_field = 'slug'
-    #permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         comments = CommentSerializer(self.get_object().comments, many=True)

@@ -13,7 +13,6 @@ export class ArticleNewComponent implements OnInit {
   articleForm = new FormGroup({
     title: new FormControl('', Validators.required),
     desc: new FormControl('', Validators.required),
-    user: new FormControl(''),
   });
 
   constructor(

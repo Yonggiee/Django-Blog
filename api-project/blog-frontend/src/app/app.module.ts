@@ -8,9 +8,13 @@ import { ArticleNewComponent } from './components/article-new/article-new.compon
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MenuComponent } from './components/menu/menu.component';
+import { LoginComponent } from './components/login/login.component';
+import { UserService } from './services/user.service';
+import { ArticleService } from './services/article.service';
 
 @NgModule({
-  declarations: [AppComponent, routingComponents, ArticleNewComponent],
+  declarations: [AppComponent, routingComponents, ArticleNewComponent, MenuComponent, LoginComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -19,7 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDialogModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [ArticleService, UserService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

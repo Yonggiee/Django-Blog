@@ -7,7 +7,6 @@ import { ArticleNewComponent } from '../article-new/article-new.component';
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.css'],
-  providers: [ArticleService]
 })
 export class ArticleListComponent implements OnInit {
 

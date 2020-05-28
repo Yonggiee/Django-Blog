@@ -1,32 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
+import { httpOptions, baseurl } from './commons.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ArticleService {
-  baseurl = 'http://0.0.0.0:8000';
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-  };
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService
+  ) {}
 
   getAllArticles(): Observable<any> {
-    return this.http.get(this.baseurl + '/articles/', this.httpOptions);
+    return this.http.get(baseurl + '/articles/', httpOptions);
   }
 
   getDetailedArticle(slug): Observable<any> {
-    return this.http.get(this.baseurl + '/article/' + slug, this.httpOptions);
+    return this.http.get(baseurl + '/article/' + slug, httpOptions);
   }
 
   getArticleComments(slug): Observable<any> {
-    return this.http.get(this.baseurl + '/article/' + slug + '/comments/', this.httpOptions);
+    return this.http.get(baseurl + '/article/' + slug + '/comments/', httpOptions);
   }
 
   postArticle(article): Observable<any> {
     const body = article;
-    return this.http.post(this.baseurl + '/articles/', body, this.httpOptions);
+    let httpOptionsWithToken = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.userService.accessToken
+      })
+    };
+    return this.http.post(baseurl + '/articles/', body, httpOptionsWithToken);
   }
 }
