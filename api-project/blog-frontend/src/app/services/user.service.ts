@@ -6,10 +6,6 @@ import { baseurl, httpOptions } from './commons.service';
   providedIn: 'root',
 })
 export class UserService {
-  accessToken: string;
-  accessTokenExpires: Date;
-  refreshToken: string;
-  refreshTokenExpires: Date;
   errors: any = [];
 
   constructor(private http: HttpClient) {}
@@ -30,10 +26,11 @@ export class UserService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshAccessToken() {
+    const refreshToken = localStorage.getItem('refreshToken');
     this.http
       .post(
         baseurl + 'api/token/refresh/',
-        JSON.stringify({ token: this.refreshToken }),
+        JSON.stringify({ token: refreshToken }),
         httpOptions
       )
       .subscribe(
@@ -47,10 +44,12 @@ export class UserService {
   }
 
   public logout() {
-    this.accessToken = null;
-    this.refreshToken = null;
-    this.accessTokenExpires = null;
-    this.refreshTokenExpires = null;
+    localStorage.clear();
+  }
+
+  public requireReaccessToken() {
+    const dateNow = Date.now();
+    // return dateNow > this.accessTokenExpires;
   }
 
   private updateAfterLogin(data) {
@@ -66,17 +65,19 @@ export class UserService {
   }
 
   private updateAccess(token){
-    this.accessToken = token;
+    localStorage.setItem('accessToken', token);
     this.errors = [];
     const token_decoded = this.decodeToken(token)
-    this.accessTokenExpires = new Date(token_decoded.exp * 1000);
+    const accessTokenExpires = token_decoded.exp * 1000;
+    localStorage.setItem('accessTokenExpires', accessTokenExpires.toString());
   }
 
   private updateRefresh(token){
-    this.refreshToken = token;
+    localStorage.setItem('refreshToken', token);
     this.errors = [];
     const token_decoded = this.decodeToken(token)
-    this.refreshTokenExpires = new Date(token_decoded.exp * 1000);
+    const refreshTokenExpires = token_decoded.exp * 1000;
+    localStorage.setItem('refreshTokenExpires', refreshTokenExpires.toString());
   }
 
   private decodeToken(token) {

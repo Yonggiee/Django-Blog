@@ -8,9 +8,15 @@ import { LoginComponent } from '../login/login.component';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent implements OnInit {
+  public isLogged: boolean = false;
+
   constructor(private dialog: MatDialog) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (localStorage.getItem('refreshToken') != null) {
+      this.isLogged = true;
+    }
+  }
 
   openLoginMenu() {
     this.dialog.open(LoginComponent);

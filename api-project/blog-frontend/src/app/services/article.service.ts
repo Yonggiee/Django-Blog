@@ -2,17 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
 import { httpOptions, baseurl } from './commons.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ArticleService {
 
-  constructor(
-    private http: HttpClient,
-    private userService: UserService
-  ) {}
+  constructor(private http: HttpClient) {}
 
   getAllArticles(): Observable<any> {
     return this.http.get(baseurl + '/articles/', httpOptions);
@@ -28,10 +24,11 @@ export class ArticleService {
 
   postArticle(article): Observable<any> {
     const body = article;
+    const accessToken = localStorage.getItem('accessToken');
     let httpOptionsWithToken = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.userService.accessToken
+        'Authorization': 'Bearer ' + accessToken
       })
     };
     return this.http.post(baseurl + '/articles/', body, httpOptionsWithToken);

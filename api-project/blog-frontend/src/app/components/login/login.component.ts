@@ -19,14 +19,14 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<LoginComponent>, 
-    private loginService: UserService
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {}
 
   onSubmit() {
     let loginDetails = this.loginForm.value;
-    this.loginService.login(loginDetails);
+    this.userService.login(loginDetails);
     this.username = this.loginForm.get('username').value;
     this.dialogRef.close([]);
   }
