@@ -13,7 +13,7 @@ export class MenuComponent implements OnInit {
   constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('refreshToken') != null) {
+    if (localStorage.hasOwnProperty('refreshToken')) {
       this.isLogged = true;
     }
   }
