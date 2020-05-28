@@ -5,7 +5,7 @@ from comment.serializers import CommentSerializer
 from .models import Article
 
 class ArticleSerializer(serializers.ModelSerializer):
-    last_modified = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    last_modified = serializers.DateTimeField(format="%Y-%m-%d %H:%M", required=False)
     user = serializers.SerializerMethodField()
 
     def get_user(self, obj):
