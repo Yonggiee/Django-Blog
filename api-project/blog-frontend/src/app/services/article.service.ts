@@ -3,29 +3,30 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ArticleService {
+  baseurl = 'http://0.0.0.0:8000';
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  };
 
-  baseurl = "http://0.0.0.0:8000";
-  httpHeaders = new HttpHeaders({'Content-Type': 'application/json'})
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  getAllArticles(): Observable<any>{
-    return this.http.get(this.baseurl + '/articles/', {headers: this.httpHeaders});
+  getAllArticles(): Observable<any> {
+    return this.http.get(this.baseurl + '/articles/', this.httpOptions);
   }
 
   getDetailedArticle(slug): Observable<any> {
-    return this.http.get(this.baseurl + '/article/' + slug, { headers: this.httpHeaders });
+    return this.http.get(this.baseurl + '/article/' + slug, this.httpOptions);
   }
 
   getArticleComments(slug): Observable<any> {
-    return this.http.get(this.baseurl + '/article/' + slug + '/comments/', { headers: this.httpHeaders });
+    return this.http.get(this.baseurl + '/article/' + slug + '/comments/', this.httpOptions);
   }
 
   postArticle(article): Observable<any> {
-    const body = article
-    return this.http.post(this.baseurl + '/articles/', body, { headers: this.httpHeaders });
+    const body = article;
+    return this.http.post(this.baseurl + '/articles/', body, this.httpOptions);
   }
 }
