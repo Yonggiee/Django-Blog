@@ -30,6 +30,7 @@ Docker
 JWT
 - JWT intro https://jwt.io/introduction/
 - JWT with django rest https://simpleisbetterthancomplex.com/tutorial/2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html
+- Angular JWT https://www.metaltoad.com/blog/angular-api-calls-django-authentication-jwt
 
 Angular
 - Django and Angular full CRUD https://www.youtube.com/watch?v=z_H-oxQVsPw
@@ -38,3 +39,4 @@ Angular
 - popup dialogs https://www.youtube.com/watch?v=ZL0d3M3uoRQ
 - Building forms in Angular https://www.youtube.com/watch?v=hAaoPOx_oIw 
 - Form group and form control https://www.youtube.com/watch?v=nofXAkAz05Q
+- Close Modal after submit https://blog.thoughtram.io/angular/2017/11/13/easy-dialogs-with-angular-material.html

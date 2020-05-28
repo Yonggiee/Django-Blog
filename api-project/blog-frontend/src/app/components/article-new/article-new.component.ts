@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ArticleService } from 'src/app/services/article.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-article-new',
@@ -15,7 +16,10 @@ export class ArticleNewComponent implements OnInit {
     user: new FormControl(''),
   });
 
-  constructor(private articleService: ArticleService) {}
+  constructor(
+    private dialogRef: MatDialogRef<ArticleNewComponent>,
+    private articleService: ArticleService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -26,5 +30,6 @@ export class ArticleNewComponent implements OnInit {
         newArticle = data;
       }
     );
+    this.dialogRef.close([]);
   }
 }
