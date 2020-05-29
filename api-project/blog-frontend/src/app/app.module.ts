@@ -10,11 +10,19 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from './components/menu/menu.component';
 import { LoginComponent } from './components/login/login.component';
-import { UserService } from './services/user.service';
-import { ArticleService } from './services/article.service';
+import { UserService } from './services/user/user.service';
+import { ArticleService } from './services/article/article.service';
+import { LoginNotiService } from './services/login-noti/login-noti.service';
+import { tokenInterceptorProvider } from './services/interceptor/tokenInterceptorProvider';
 
 @NgModule({
-  declarations: [AppComponent, routingComponents, ArticleNewComponent, MenuComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    routingComponents,
+    ArticleNewComponent,
+    MenuComponent,
+    LoginComponent
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -23,7 +31,12 @@ import { ArticleService } from './services/article.service';
     MatDialogModule,
     ReactiveFormsModule,
   ],
-  providers: [ArticleService, UserService],
+  providers: [
+    ArticleService,
+    UserService,
+    LoginNotiService,
+    tokenInterceptorProvider
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

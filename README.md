@@ -40,4 +40,5 @@ Angular
 - Building forms in Angular https://www.youtube.com/watch?v=hAaoPOx_oIw 
 - Form group and form control https://www.youtube.com/watch?v=nofXAkAz05Q
 - Close Modal after submit https://blog.thoughtram.io/angular/2017/11/13/easy-dialogs-with-angular-material.html
+- Http interceptors https://www.youtube.com/watch?v=UrfhqE7I-3o
 - Component Interaction in Angular https://www.youtube.com/watch?v=eqz35AQoVcs&list=PLC3y8-rFHvwgKhaLU8GTyF-5Bb8qT-wzV

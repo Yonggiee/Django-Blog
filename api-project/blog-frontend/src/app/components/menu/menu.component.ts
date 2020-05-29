@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from '../login/login.component';
-import { LoginNotiService } from 'src/app/services/login-noti.service';
-import { UserService } from 'src/app/services/user.service';
+import { LoginNotiService } from 'src/app/services/login-noti/login-noti.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-menu',
