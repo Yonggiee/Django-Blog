@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { baseurl, httpOptions } from './commons.service';
+import { LoginNotiService } from './login-noti.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,10 @@ import { baseurl, httpOptions } from './commons.service';
 export class UserService {
   errors: any = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private loginNotiService: LoginNotiService
+  ) {}
 
   // Uses http.post() to get an auth token from djangorestframework-jwt endpoint
   public login(user) {
@@ -17,6 +21,7 @@ export class UserService {
       .subscribe(
         (data) => {
           this.updateAfterLogin(data);
+          this.loginNotiService.triggerService();
         },
         (err) => {
           this.errors = err['error'];
@@ -45,6 +50,7 @@ export class UserService {
 
   public logout() {
     localStorage.clear();
+    this.loginNotiService.triggerService();
   }
 
   public requireReaccessToken() {

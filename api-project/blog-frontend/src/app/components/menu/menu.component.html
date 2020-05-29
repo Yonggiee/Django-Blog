@@ -1,5 +1,5 @@
 <div *ngIf="isLogged; else elseBlock">
-    <button (click)="openLoginMenu()">Logout</button>
+    <button (click)="logout()">Logout</button>
 </div>
 <ng-template #elseBlock>
     <button (click)="openLoginMenu()">Login</button>
