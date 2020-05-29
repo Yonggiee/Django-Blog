@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { baseurl, httpOptions } from '../commons.service';
 import { LoginNotiService } from '../login-noti/login-noti.service';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -30,21 +29,6 @@ export class UserService {
       );
   }
 
-  // Refreshes the JWT token, to extend the time the user is logged in
-  public refreshAccessToken() {
-    const refreshToken = localStorage.getItem('refreshToken');
-    return this.http
-      .post(
-        baseurl + 'api/token/refresh/',
-        JSON.stringify({ token: refreshToken }),
-        httpOptions
-      ).pipe(map((data) => {
-        console.log("yes")
-        console.log(data);
-        this.updateAfterRefreshAccessToken(data);
-      }))
-  }
-
   public logout() {
     localStorage.clear();
     this.loginNotiService.triggerService();
@@ -55,11 +39,6 @@ export class UserService {
     const refreshToken = data['refresh'];
     this.updateAccess(accessToken);
     this.updateRefresh(refreshToken);
-  }
-
-  private updateAfterRefreshAccessToken(data){
-    const accessToken = data['access'];
-    this.updateAccess(accessToken);
   }
 
   private updateAccess(token){
