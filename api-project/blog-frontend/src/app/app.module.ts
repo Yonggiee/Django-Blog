@@ -14,6 +14,7 @@ import { UserService } from './services/user/user.service';
 import { ArticleService } from './services/article/article.service';
 import { LoginNotiService } from './services/login-noti/login-noti.service';
 import { tokenInterceptorProvider } from './services/interceptor/tokenInterceptorProvider';
+import { PusherService } from './services/pusher/pusher.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { tokenInterceptorProvider } from './services/interceptor/tokenIntercepto
     ArticleService,
     UserService,
     LoginNotiService,
+    PusherService,
     tokenInterceptorProvider
   ],
   bootstrap: [AppComponent],

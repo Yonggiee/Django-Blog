@@ -7,7 +7,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, SAFE_METHODS
 from .models import Article
 from .serializers import ArticleSerializer, ArticleCommentSerializer
 from comment.serializers import CommentSerializer
+import pusher
 
+pusher_client = pusher.Pusher(
+    app_id='1009961',
+    key='abba23015c83be9e8d00',
+    secret='a7149199c00f4062f0e2',
+    cluster='ap1',
+    ssl=True
+)
 
 class ArticleList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
@@ -24,6 +32,8 @@ class ArticleList(mixins.ListModelMixin,
         return self.list(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
+        pusher_client.trigger('my-channel', 'my-event',
+                              {'message': 'hello world'})
         return self.create(request, *args, **kwargs)
     
     def perform_create(self, serializer):
