@@ -12,11 +12,4 @@ export class PusherService {
       cluster: 'ap1',
     });
   }
-
-  subscribeToArticlesChannel(instance) {
-    let channel = this.pusher.subscribe('my-channel');
-    channel.bind('my-event', function () {
-      instance.getArticles();
-    });
-  }
 }

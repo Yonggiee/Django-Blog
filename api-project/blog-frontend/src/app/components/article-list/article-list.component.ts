@@ -20,7 +20,7 @@ export class ArticleListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getArticles();
-    this.pusherService.subscribeToArticlesChannel(this);
+    this.subscribeToArticlesChannel();
   }
 
   getArticles() {
@@ -31,5 +31,13 @@ export class ArticleListComponent implements OnInit {
 
   newArticle() {
     this.dialog.open(ArticleNewComponent);
+  }
+
+  subscribeToArticlesChannel() {
+    const component = this;
+    let channel = this.pusherService.pusher.subscribe('blog');
+    channel.bind('refresh-articles', function () {
+      component.getArticles();
+    });
   }
 }

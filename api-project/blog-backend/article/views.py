@@ -32,8 +32,8 @@ class ArticleList(mixins.ListModelMixin,
         return self.list(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        pusher_client.trigger('my-channel', 'my-event',
-                              {'message': 'hello world'})
+        pusher_client.trigger('blog', 'refresh-articles',
+                              {'message': 'More articles have been added'})
         return self.create(request, *args, **kwargs)
     
     def perform_create(self, serializer):
