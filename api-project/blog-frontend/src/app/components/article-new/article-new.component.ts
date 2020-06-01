@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ArticleService } from 'src/app/services/article/article.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-article-new',
@@ -10,6 +11,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./article-new.component.css'],
 })
 export class ArticleNewComponent implements OnInit {
+  articleSubscription: Subscription;
   articleForm = new FormGroup({
     title: new FormControl('', Validators.required),
     desc: new FormControl('', Validators.required),
@@ -24,7 +26,7 @@ export class ArticleNewComponent implements OnInit {
 
   onSubmit() {
     let newArticle = this.articleForm.value;
-    this.articleService.postArticle(newArticle).subscribe(
+    this.articleSubscription = this.articleService.postArticle(newArticle).subscribe(
       data => {
         newArticle = data;
       }

@@ -43,3 +43,6 @@ Angular
 - HttpInterceptors https://www.youtube.com/watch?v=UrfhqE7I-3o
 - HttpInterceptor jwt refresh https://medium.com/@monkov/angular-using-httpinterceptor-for-token-refreshing-3f04ea2ccb81
 - Component Interaction in Angular https://www.youtube.com/watch?v=eqz35AQoVcs&list=PLC3y8-rFHvwgKhaLU8GTyF-5Bb8qT-wzV
+
+AWS
+- https://www.youtube.com/watch?v=8TlukLu11Yo

@@ -2,6 +2,6 @@
 <button (click)="newArticle()">New</button>
 <ul>
     <li *ngFor="let article of articles">
-        <a [routerLink]="['/article', article.slug]">{{ article.title }}</a>
+        <a [routerLink]="['/article', article.slug]">{{ article.title }}</a> <! –– routerLink="/article" and [routerLink]="'/article'" ––>
     </li>
 </ul>

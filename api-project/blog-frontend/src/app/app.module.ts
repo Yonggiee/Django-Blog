@@ -33,7 +33,7 @@ import { PusherService } from './services/pusher/pusher.service';
     ReactiveFormsModule,
   ],
   providers: [
-    ArticleService,
+    ArticleService, //not need if use providedIn: 'root' in the service
     UserService,
     LoginNotiService,
     PusherService,
