@@ -105,3 +105,21 @@ Common database Naming conventions
 - are empty parameters, they shouldn't be there without any value as it just pollutes
 - created_at
 - updated_at
+
+Django Managers
+- "model.Manager"
+- Overwrite to get special methods for query like Post.objects.get_smaller_than()
+- "model.QuerySet"
+- def get_queryset(self): return PostQuerySet(self.model, using=self._db)
+- can have multiple managers in for one model and use Post.(name).(function)
+- Table level funcions
+
+Django Signals
+- common signals pre_save and post_save
+- https://docs.djangoproject.com/en/3.0/topics/signals/
+
+-The .to_representation() method is called to convert the initial datatype into a primitive, serializable datatype.
+
+-The to_internal_value() method is called to restore a primitive datatype into its internal python representation. This method should raise a serializers.ValidationError if the data is invalid.-
+
+Django Groups

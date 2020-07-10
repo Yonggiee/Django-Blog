@@ -1,0 +1,98 @@
+Cloudfront
+Edge Location - This is the location where content will be cached. This is separate to an AWS Region/AZ
+Origin - This is the origin of all the files that the CDN will be distributed. This can be S3 bucket, EC2 instance, ELB or Route53
+Distribution - This is the name given the CDN which consists of a collection of Edge Locations
+Web Distribution - typically used for Websites
+RTMP - Used for Media Streaming
+Edge locations are not just READ only - you can write to them too (put an object
+
+AWS Region/AZ means the available zones (AZ) of a AWS region are at
+
+IAM is universal, it does not apply to regions at this time.
+The 'root account' is simply the account created when first setting up your AWS account. It has complete Admin access.
+New Users have NO permissions when first created.
+New Users are assigned Access Key ID & Secret Access Keys when first created. (console access or programmatic access).
+These are not the same as a password. You cannot use the Access Key ID & Secret Access Key to login to the console. You can use this to access AWS via 
+
+AWS EC2
+- EC2 is a web-service which aims to make life easier for developers by providing secure and resizeble compute capacity in the cloud.
+- Steps to use EC2
+. Create an AMI(Amazon Machine Image)
+. Choose an instance type (type/size of hardware)
+. Configure the instance
+. Adding storage
+. Add tags to easily identify an Ec2 instance
+. Configure firewall/security group to accept or block external connection to the instance based on port number and ip address
+. Review the configuration to deploy
+
+AMI
+- is a template that is used to create a new instance/machine based on user requirement
+- software/additional applications/OS/access permissions
+- Two types of AMI
+. predefined AMIs / Custom AMIs that we create
+- Five families
+. Compute optimized (high computing)
+. Memory optimized (caching)
+. GPU optimized (gaming/large graphical requirements)
+. Storage optimized (storage servers)
+. General purpose (well-balanced)
+- Configure the instance
+. Assign public address to it
+. Assign authentication
+. Shutdown behaviour(stop(shutdown the system)/terminate(give control back to Amazon))
+. Bootstraps the instance with some scripts
+. Choose the payment type
+- Add storage
+. Ephemeral (temperory and free)/ Amazon Elastic Block Store (permanent and paid) / Amazon S3
+. Whether it needs to be encrypted
+- Review
+. Private(user) and public(amazon) key
+
+S3
+- storage
+- Elastic Block Store is like a SSD hardware attached to the EC2 instance
+- Elastic File System is like EBS but EFS is shared systems so can be accessed by multiple instances compared to EBS
+- Glacier is to archive
+- Storage gateway have local storage and cloud/internet users access the local storage
+- S3 is object storage service, cannot install anything in it.
+- One of the cheapest(low cost)
+- Secure (encryption, MFA authentication)
+- Features Bucket policies, life cycle policies, versioning control
+
+Object
+- consists of data, key and metadata
+
+Bucket
+- Stores objects
+- when data added to bucket creates a unique version ID and allocates to the object
+- Have unique names
+
+Storage clases
+. standard (less or low latency)
+. Infrequent data access
+. Glacier (archiving)
+. One Zone (infrequent and in one location only)
+. Standard reduced redundancy storage (non critical and can be replaced if lost)
+
+Lifecycle Management
+- Move the object or bucket to another tier after some time
+- Transition actions and expiration actions
+
+Bucket policies
+- Any and deny permission to the s3 resource
+- Use json file to define the policy
+
+Data encryption
+- Client-side encryption at rest
+- Server-side encryption in motion
+
+Versioning
+- Something like git commits
+
+Cross-Region Replication
+- automatic copying of every object uploaded to your buckets in different AWS regions
+- Versioning must be enabled
+
+Transfer acceleration
+- Fast, easy and secure transfer of files over long distance
+- Content delivery network that securely transfers data to your destination with high transfer speed

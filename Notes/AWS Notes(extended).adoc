@@ -1,0 +1,29 @@
+AWS has regions around the world and availability zones
+- Some services does not require region specified like IAM
+
+SSH
+- ssh -i {{key}} ec2-user@ip
+
+Security group is used to configure network
+
+EBS
+- schedule periodic snapshots to backup volume
+
+RDS
+- backups are automatically enable in RDS
+
+ElastiCache
+- How to implement with RDS
+
+S3
+- with versioning, when delete, creates the same file with new version and a delete marker
+- encryption with SSE-C, client-provided data key gets thrown away after encryption
+- Networking s3 security -> instances with no internet in VPC can talk to s3
+
+Iam roles
+- Ec2 roles, inline policies are policies that are assigned to only that ec2 instance and not managed globally
+
+
+Things for further reading
+- listeners for load balancer, how to toggle rules
+- more on load balancers
