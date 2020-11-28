@@ -1,11 +1,20 @@
-# Cynopsis Entertainment
+# Django Blog + Dockerised API Endpoints
 
-Resources that I used to learn
+Home Page
+![Home Page](screenshots/List.png "Title")
+
+Post Page
+![Home Page](screenshots/Post.png "Title")
+
+Endpoints
+![Endpoints](screenshots/Endpoints.png "Title")
+
+Tech stack that I learned
 - Django
 - Docker
 - Angular
 
-Resources
+## Resources
 
 Django
 
